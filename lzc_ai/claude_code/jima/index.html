@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="吉马程序员 - 从零开始学编程，成就你的技术梦想。实战驱动教学，一线大厂讲师，助你拿下高薪Offer。">
+  <title>吉马程序员 - 专业的编程培训品牌</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🐎</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ====== 1. NAVIGATION ====== -->
+  <header class="header" id="header">
+    <nav class="nav container">
+      <a href="#" class="nav__logo">
+        <svg class="nav__logo-icon" width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <rect width="36" height="36" rx="10" fill="#FF6B35"/>
+          <text x="18" y="25" text-anchor="middle" font-size="20" font-weight="900" fill="white">J</text>
+        </svg>
+        <span class="nav__logo-text">吉马程序员</span>
+      </a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="#hero" class="nav__link nav__link--active">首页</a></li>
+        <li><a href="#courses" class="nav__link">课程服务</a></li>
+        <li><a href="#portfolio" class="nav__link">学员作品</a></li>
+        <li><a href="#about" class="nav__link">关于我们</a></li>
+        <li><a href="#blog" class="nav__link">技术博客</a></li>
+        <li><a href="#contact" class="nav__link">联系我们</a></li>
+      </ul>
+      <a href="#contact" class="nav__cta btn btn--primary btn--sm">免费试听</a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ====== 2. HERO SECTION ====== -->
+    <section class="hero" id="hero">
+      <div class="hero__container container">
+        <div class="hero__content" data-reveal>
+          <span class="hero__badge">🔥 2025 暑期班火热招生中</span>
+          <h1 class="hero__title">从零开始，<br><span class="text--gradient">成为专业程序员</span></h1>
+          <p class="hero__subtitle">实战驱动教学，一线大厂讲师，助你 6 个月拿下高薪 Offer</p>
+          <div class="hero__actions">
+            <a href="#contact" class="btn btn--primary btn--lg">免费试听 🚀</a>
+            <a href="#courses" class="btn btn--outline btn--lg">了解课程</a>
+          </div>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <strong data-count="3000" data-suffix="+">3000+</strong>
+              <span>已毕业学员</span>
+            </div>
+            <div class="hero__stat">
+              <strong>95<span>%</span></strong>
+              <span>就业率</span>
+            </div>
+            <div class="hero__stat">
+              <strong>15K<span>+</span></strong>
+              <span>平均薪资</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero__visual" data-reveal>
+          <div class="hero__blob"></div>
+          <div class="hero__blob hero__blob--2"></div>
+          <div class="hero__code-window">
+            <div class="hero__code-dots"><span></span><span></span><span></span></div>
+            <div class="hero__code-line">const jima = {</div>
+            <div class="hero__code-line">&nbsp;&nbsp;mission: <span class="hero__code-str">"培养优秀程序员"</span>,</div>
+            <div class="hero__code-line">&nbsp;&nbsp;method: <span class="hero__code-str">"实战驱动"</span>,</div>
+            <div class="hero__code-line">&nbsp;&nbsp;result: <span class="hero__code-str">"高薪就业"</span></div>
+            <div class="hero__code-line">};</div>
+            <div class="hero__code-cursor">|</div>
+          </div>
+          <div class="hero__float hero__float--1">{ }</div>
+          <div class="hero__float hero__float--2">&lt;/&gt;</div>
+          <div class="hero__float hero__float--3">def code():</div>
+          <div class="hero__float hero__float--4">npm run dev</div>
+        </div>
+      </div>
+      <div class="hero__wave">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,40 C240,100 480,0 720,60 C960,120 1200,20 1440,50 L1440,120 L0,120 Z" fill="#FFFAF5"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ====== 3. COURSES SECTION ====== -->
+    <section class="courses section" id="courses">
+      <div class="container">
+        <div class="section__header" data-reveal>
+          <span class="section__tag">课程服务</span>
+          <h2 class="section__title">热门课程，<span class="text--highlight">总有一款适合你</span></h2>
+          <p class="section__desc">从入门到就业，体系化课程设计，跟随行业大牛系统学习</p>
+        </div>
+
+        <div class="courses__tabs" data-reveal>
+          <button class="courses__tab courses__tab--active" data-filter="all">全部课程</button>
+          <button class="courses__tab" data-filter="frontend">前端开发</button>
+          <button class="courses__tab" data-filter="backend">后端开发</button>
+          <button class="courses__tab" data-filter="mobile">移动开发</button>
+          <button class="courses__tab" data-filter="ai">AI / 数据</button>
+        </div>
+
+        <div class="courses__grid" id="courses-grid">
+          <article class="course-card" data-category="frontend" data-reveal>
+            <div class="course-card__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="#FFF3ED"/>
+                <path d="M14 16h20M14 22h14M14 28h18M14 34h10" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="course-card__level course-card__level--beginner">入门</span>
+            <h3 class="course-card__title">Web 前端开发实战营</h3>
+            <p class="course-card__desc">从 HTML/CSS 到 React 全家桶，掌握现代前端开发全流程</p>
+            <div class="course-card__tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span>
+            </div>
+            <div class="course-card__meta">
+              <span>⏱ 12 周</span>
+              <span>📁 5 个项目</span>
+            </div>
+            <div class="course-card__footer">
+              <div class="course-card__rating">⭐ 4.9 <small>(230 评价)</small></div>
+              <div class="course-card__price">¥6,999 <span>起</span></div>
+            </div>
+            <a href="#contact" class="course-card__cta">查看详情 →</a>
+          </article>
+
+          <article class="course-card" data-category="backend" data-reveal>
+            <div class="course-card__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="#EDF5FF"/>
+                <rect x="12" y="14" width="24" height="20" rx="3" stroke="#004E89" stroke-width="2.5" fill="none"/>
+                <path d="M12 22h24" stroke="#004E89" stroke-width="2"/>
+                <circle cx="24" cy="18" r="1.5" fill="#004E89"/>
+              </svg>
+            </div>
+            <span class="course-card__level course-card__level--middle">进阶</span>
+            <h3 class="course-card__title">Java 后端开发体系课</h3>
+            <p class="course-card__desc">Spring Boot + 微服务架构，从 CRUD 到高并发系统设计</p>
+            <div class="course-card__tags">
+              <span>Java</span><span>Spring Boot</span><span>MySQL</span><span>Redis</span>
+            </div>
+            <div class="course-card__meta">
+              <span>⏱ 16 周</span>
+              <span>📁 8 个项目</span>
+            </div>
+            <div class="course-card__footer">
+              <div class="course-card__rating">⭐ 4.8 <small>(186 评价)</small></div>
+              <div class="course-card__price">¥8,999 <span>起</span></div>
+            </div>
+            <a href="#contact" class="course-card__cta">查看详情 →</a>
+          </article>
+
+          <article class="course-card" data-category="mobile" data-reveal>
+            <div class="course-card__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="#F0FDF4"/>
+                <rect x="16" y="8" width="16" height="32" rx="3" stroke="#06D6A0" stroke-width="2.5" fill="none"/>
+                <path d="M20 32h8" stroke="#06D6A0" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="course-card__level course-card__level--beginner">入门</span>
+            <h3 class="course-card__title">Flutter 移动端开发</h3>
+            <p class="course-card__desc">一套代码搞定 iOS + Android，跨平台开发效率翻倍</p>
+            <div class="course-card__tags">
+              <span>Dart</span><span>Flutter</span><span>Firebase</span>
+            </div>
+            <div class="course-card__meta">
+              <span>⏱ 10 周</span>
+              <span>📁 4 个项目</span>
+            </div>
+            <div class="course-card__footer">
+              <div class="course-card__rating">⭐ 4.7 <small>(98 评价)</small></div>
+              <div class="course-card__price">¥7,499 <span>起</span></div>
+            </div>
+            <a href="#contact" class="course-card__cta">查看详情 →</a>
+          </article>
+
+          <article class="course-card" data-category="frontend" data-reveal>
+            <div class="course-card__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="#FFF3ED"/>
+                <circle cx="20" cy="18" r="6" stroke="#FF6B35" stroke-width="2.5"/>
+                <path d="M12 36c0-6 3-10 8-10s8 4 8 10" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M30 16l8 8-8 8" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="course-card__level course-card__level--advanced">高级</span>
+            <h3 class="course-card__title">前端架构与性能优化</h3>
+            <p class="course-card__desc">深入 Webpack/Vite 原理，掌握大型项目架构设计能力</p>
+            <div class="course-card__tags">
+              <span>TypeScript</span><span>Webpack</span><span>性能优化</span>
+            </div>
+            <div class="course-card__meta">
+              <span>⏱ 8 周</span>
+              <span>📁 3 个项目</span>
+            </div>
+            <div class="course-card__footer">
+              <div class="course-card__rating">⭐ 4.9 <small>(67 评价)</small></div>
+              <div class="course-card__price">¥9,999 <span>起</span></div>
+            </div>
+            <a href="#contact" class="course-card__cta">查看详情 →</a>
+          </article>
+
+          <article class="course-card" data-category="ai" data-reveal>
+            <div class="course-card__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="#FAF0FF"/>
+                <circle cx="20" cy="18" r="8" stroke="#A239EA" stroke-width="2.5"/>
+                <path d="M18 26l6 10 4-6 5 7" stroke="#A239EA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="course-card__level course-card__level--middle">进阶</span>
+            <h3 class="course-card__title">AI 大模型应用开发</h3>
+            <p class="course-card__desc">LLM 应用实战，Prompt 工程 + RAG + Agent 开发全链路</p>
+            <div class="course-card__tags">
+              <span>Python</span><span>LangChain</span><span>OpenAI</span>
+            </div>
+            <div class="course-card__meta">
+              <span>⏱ 10 周</span>
+              <span>📁 5 个项目</span>
+            </div>
+            <div class="course-card__footer">
+              <div class="course-card__rating">⭐ 4.9 <small>(142 评价)</small></div>
+              <div class="course-card__price">¥10,999 <span>起</span></div>
+            </div>
+            <a href="#contact" class="course-card__cta">查看详情 →</a>
+          </article>
+
+          <article class="course-card" data-category="backend" data-reveal>
+            <div class="course-card__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <rect width="48" height="48" rx="14" fill="#EDF5FF"/>
+                <ellipse cx="24" cy="16" rx="10" ry="4" stroke="#004E89" stroke-width="2.5"/>
+                <path d="M14 16v8c0 2 4 4 10 4s10-2 10-4v-8" stroke="#004E89" stroke-width="2.5"/>
+                <path d="M14 24v6c0 2 4 4 10 4s10-2 10-4v-6" stroke="#004E89" stroke-width="2.5" stroke-dasharray="3 3"/>
+              </svg>
+            </div>
+            <span class="course-card__level course-card__level--beginner">入门</span>
+            <h3 class="course-card__title">Python 全栈开发</h3>
+            <p class="course-card__desc">Django + FastAPI + Vue，快速构建全栈 Web 应用</p>
+            <div class="course-card__tags">
+              <span>Python</span><span>Django</span><span>FastAPI</span><span>Vue</span>
+            </div>
+            <div class="course-card__meta">
+              <span>⏱ 14 周</span>
+              <span>📁 6 个项目</span>
+            </div>
+            <div class="course-card__footer">
+              <div class="course-card__rating">⭐ 4.8 <small>(156 评价)</small></div>
+              <div class="course-card__price">¥7,999 <span>起</span></div>
+            </div>
+            <a href="#contact" class="course-card__cta">查看详情 →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 4. PORTFOLIO SECTION ====== -->
+    <section class="portfolio section section--alt" id="portfolio">
+      <div class="container">
+        <div class="section__header" data-reveal>
+          <span class="section__tag">学员作品</span>
+          <h2 class="section__title">看得见的成长，<span class="text--highlight">学员真实项目</span></h2>
+          <p class="section__desc">每个项目都是学员独立完成的实战作品，见证他们的蜕变</p>
+        </div>
+
+        <div class="portfolio__tabs" data-reveal>
+          <button class="portfolio__tab portfolio__tab--active" data-filter="all">全部</button>
+          <button class="portfolio__tab" data-filter="web">Web 应用</button>
+          <button class="portfolio__tab" data-filter="miniapp">小程序</button>
+          <button class="portfolio__tab" data-filter="mobile">移动 App</button>
+          <button class="portfolio__tab" data-filter="backend">后台系统</button>
+        </div>
+
+        <div class="portfolio__grid" id="portfolio-grid">
+          <article class="case-card" data-category="web" data-reveal>
+            <div class="case-card__thumb case-card__thumb--grad1">
+              <div class="case-card__overlay">
+                <span class="case-card__view">查看项目 →</span>
+              </div>
+              <span class="case-card__badge">优秀作品</span>
+            </div>
+            <h3 class="case-card__title">在线教育平台</h3>
+            <p class="case-card__author">by 张同学 · 前端第12期</p>
+            <div class="case-card__tags"><span>React</span><span>TypeScript</span><span>Ant Design</span></div>
+          </article>
+
+          <article class="case-card" data-category="miniapp" data-reveal>
+            <div class="case-card__thumb case-card__thumb--grad2">
+              <div class="case-card__overlay">
+                <span class="case-card__view">查看项目 →</span>
+              </div>
+              <span class="case-card__badge">优秀作品</span>
+            </div>
+            <h3 class="case-card__title">社区团购小程序</h3>
+            <p class="case-card__author">by 李同学 · 全栈第8期</p>
+            <div class="case-card__tags"><span>微信小程序</span><span>云开发</span></div>
+          </article>
+
+          <article class="case-card" data-category="backend" data-reveal>
+            <div class="case-card__thumb case-card__thumb--grad3">
+              <div class="case-card__overlay">
+                <span class="case-card__view">查看项目 →</span>
+              </div>
+              <span class="case-card__badge">优秀作品</span>
+            </div>
+            <h3 class="case-card__title">智能仓储管理系统</h3>
+            <p class="case-card__author">by 王同学 · Java第10期</p>
+            <div class="case-card__tags"><span>Spring Boot</span><span>Vue</span><span>MySQL</span></div>
+          </article>
+
+          <article class="case-card" data-category="mobile" data-reveal>
+            <div class="case-card__thumb case-card__thumb--grad4">
+              <div class="case-card__overlay">
+                <span class="case-card__view">查看项目 →</span>
+              </div>
+              <span class="case-card__badge">优秀作品</span>
+            </div>
+            <h3 class="case-card__title">健身打卡 App</h3>
+            <p class="case-card__author">by 赵同学 · 移动第5期</p>
+            <div class="case-card__tags"><span>Flutter</span><span>Firebase</span></div>
+          </article>
+
+          <article class="case-card" data-category="web" data-reveal>
+            <div class="case-card__thumb case-card__thumb--grad2">
+              <div class="case-card__overlay">
+                <span class="case-card__view">查看项目 →</span>
+              </div>
+            </div>
+            <h3 class="case-card__title">企业官网 CMS</h3>
+            <p class="case-card__author">by 刘同学 · 前端第11期</p>
+            <div class="case-card__tags"><span>Next.js</span><span>Prisma</span><span>PostgreSQL</span></div>
+          </article>
+
+          <article class="case-card" data-category="miniapp" data-reveal>
+            <div class="case-card__thumb case-card__thumb--grad1">
+              <div class="case-card__overlay">
+                <span class="case-card__view">查看项目 →</span>
+              </div>
+            </div>
+            <h3 class="case-card__title">校园二手交易</h3>
+            <p class="case-card__author">by 陈同学 · 全栈第9期</p>
+            <div class="case-card__tags"><span>UniApp</span><span>Node.js</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 5. ABOUT SECTION ====== -->
+    <section class="about section" id="about">
+      <div class="container">
+        <div class="section__header" data-reveal>
+          <span class="section__tag">关于我们</span>
+          <h2 class="section__title">用心做教育，<span class="text--highlight">让每个人都能学会编程</span></h2>
+          <p class="section__desc">我们相信，编程不是少数人的天赋，而是每个人都能掌握的技能</p>
+        </div>
+
+        <div class="about__story" data-reveal>
+          <p>吉马程序员成立于2020年，由一群来自一线互联网大厂的技术专家联合创立。我们深知传统编程培训的痛点——脱离实战、照本宣科、学完找不到工作。因此，我们从第一天就坚持<strong>"实战驱动、项目导向"</strong>的教学理念，让每一位学员都能学到真正用得上的技能。</p>
+        </div>
+
+        <div class="about__counters" data-reveal>
+          <div class="about__counter">
+            <strong class="about__counter-num" data-count="3000" data-suffix="+">3000+</strong>
+            <span>累计学员</span>
+          </div>
+          <div class="about__counter">
+            <strong class="about__counter-num" data-count="50" data-suffix="+">50+</strong>
+            <span>开设课程</span>
+          </div>
+          <div class="about__counter">
+            <strong class="about__counter-num" data-count="200" data-suffix="+">200+</strong>
+            <span>实战项目</span>
+          </div>
+          <div class="about__counter">
+            <strong class="about__counter-num" data-count="98" data-suffix="%">98%</strong>
+            <span>学员满意度</span>
+          </div>
+        </div>
+
+        <div class="about__values" data-reveal>
+          <div class="value-card">
+            <div class="value-card__icon">🎯</div>
+            <h3 class="value-card__title">实战驱动</h3>
+            <p class="value-card__desc">每个知识点都配套真实项目，学完即用，不做纸上谈兵的程序员</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon">🏢</div>
+            <h3 class="value-card__title">大厂讲师</h3>
+            <p class="value-card__desc">讲师均来自 BAT、字节、美团等一线大厂，带给你业界最前沿的实践经验</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon">👥</div>
+            <h3 class="value-card__title">小班教学</h3>
+            <p class="value-card__desc">每班不超过30人，1v1答疑辅导，确保每位学员都能跟上进度</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon">💼</div>
+            <h3 class="value-card__title">就业保障</h3>
+            <p class="value-card__desc">简历指导 + 模拟面试 + 企业内推，全方位助力你的求职之路</p>
+          </div>
+        </div>
+
+        <div class="about__team" data-reveal>
+          <h3 class="about__team-title">核心讲师团队</h3>
+          <div class="about__team-grid">
+            <div class="team-card">
+              <div class="team-card__avatar team-card__avatar--1">🐎</div>
+              <h4 class="team-card__name">马老师</h4>
+              <p class="team-card__role">前端技术总监</p>
+              <p class="team-card__bio">前字节跳动前端架构师，10 年前端开发经验</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card__avatar team-card__avatar--2">🐯</div>
+              <h4 class="team-card__name">张老师</h4>
+              <p class="team-card__role">后端技术专家</p>
+              <p class="team-card__bio">前阿里 P8，主导过双11核心系统架构设计</p>
+            </div>
+            <div class="team-card">
+              <div class="team-card__avatar team-card__avatar--3">🐍</div>
+              <h4 class="team-card__name">李老师</h4>
+              <p class="team-card__role">AI 课程负责人</p>
+              <p class="team-card__bio">前商汤科技算法研究员，多篇顶会论文作者</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 6. BLOG SECTION ====== -->
+    <section class="blog section section--alt" id="blog">
+      <div class="container">
+        <div class="section__header" data-reveal>
+          <span class="section__tag">技术博客</span>
+          <h2 class="section__title">技术干货，<span class="text--highlight">持续输出</span></h2>
+          <p class="section__desc">来自一线讲师的技术分享，助你掌握最新行业动态</p>
+        </div>
+
+        <div class="blog__grid">
+          <article class="blog-card" data-reveal>
+            <div class="blog-card__thumb blog-card__thumb--1">
+              <span class="blog-card__category" style="--cat-color: var(--color-primary)">前端开发</span>
+            </div>
+            <div class="blog-card__body">
+              <time class="blog-card__date">2025-05-15</time>
+              <h3 class="blog-card__title">React 19 新特性全面解析：Server Components 实战指南</h3>
+              <p class="blog-card__excerpt">React 19 带来了全新的 Server Components 范式，本文将带你深入理解其工作原理...</p>
+              <span class="blog-card__more">阅读更多 →</span>
+            </div>
+          </article>
+
+          <article class="blog-card" data-reveal>
+            <div class="blog-card__thumb blog-card__thumb--2">
+              <span class="blog-card__category" style="--cat-color: var(--color-accent-green)">后端开发</span>
+            </div>
+            <div class="blog-card__body">
+              <time class="blog-card__date">2025-05-10</time>
+              <h3 class="blog-card__title">从零搭建微服务架构：Spring Cloud 最佳实践</h3>
+              <p class="blog-card__excerpt">微服务虽好，但架构复杂度不容忽视。本文总结了在实际项目中踩过的坑与经验...</p>
+              <span class="blog-card__more">阅读更多 →</span>
+            </div>
+          </article>
+
+          <article class="blog-card" data-reveal>
+            <div class="blog-card__thumb blog-card__thumb--3">
+              <span class="blog-card__category" style="--cat-color: var(--color-accent-purple)">AI / 数据</span>
+            </div>
+            <div class="blog-card__body">
+              <time class="blog-card__date">2025-05-08</time>
+              <h3 class="blog-card__title">LangChain 入门指南：10 行代码构建你的第一个 AI 应用</h3>
+              <p class="blog-card__excerpt">AI 时代，不会用大模型就 out 了。这篇教程带你快速上手 LangChain 框架...</p>
+              <span class="blog-card__more">阅读更多 →</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 7. CONTACT SECTION ====== -->
+    <section class="contact section" id="contact">
+      <div class="container">
+        <div class="section__header" data-reveal>
+          <span class="section__tag">联系我们</span>
+          <h2 class="section__title">迈出第一步，<span class="text--highlight">开启编程之旅</span></h2>
+          <p class="section__desc">填写表单或扫码添加老师微信，我们会尽快联系你</p>
+        </div>
+
+        <div class="contact__grid">
+          <div class="contact__form-wrapper" data-reveal>
+            <form class="contact__form" id="contact-form" novalidate>
+              <div class="form__group">
+                <label class="form__label" for="name">姓名 *</label>
+                <input type="text" id="name" class="form__input" placeholder="请输入你的姓名" required>
+                <span class="form__error">请输入姓名</span>
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="phone">手机/微信 *</label>
+                <input type="text" id="phone" class="form__input" placeholder="请输入手机号或微信号" required>
+                <span class="form__error">请输入手机号或微信号</span>
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="email">邮箱</label>
+                <input type="email" id="email" class="form__input" placeholder="请输入邮箱（选填）">
+                <span class="form__error">请输入正确的邮箱格式</span>
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="interest">意向课程</label>
+                <select id="interest" class="form__select">
+                  <option value="">请选择你感兴趣的课程方向</option>
+                  <option value="frontend">前端开发</option>
+                  <option value="backend">后端开发</option>
+                  <option value="mobile">移动开发</option>
+                  <option value="ai">AI / 数据</option>
+                  <option value="unknown">还不确定</option>
+                </select>
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="message">留言</label>
+                <textarea id="message" class="form__textarea" rows="3" placeholder="有什么想对我们说的？（选填）"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn--primary btn--lg contact__submit">提交咨询 →</button>
+              <p class="form__note">提交即表示你同意我们的隐私政策</p>
+            </form>
+
+            <div class="contact__success" id="contact-success" style="display:none;">
+              <div class="contact__success-icon">✅</div>
+              <h3>提交成功！</h3>
+              <p>我们将在 24 小时内联系你，请保持手机畅通</p>
+            </div>
+          </div>
+
+          <div class="contact__info" data-reveal>
+            <div class="contact__qr-card">
+              <div class="contact__qr-placeholder">
+                <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+                  <rect width="180" height="180" rx="16" fill="white"/>
+                  <rect x="20" y="20" width="60" height="60" rx="8" fill="#FF6B35" opacity="0.15"/>
+                  <rect x="100" y="20" width="60" height="60" rx="8" fill="#FF6B35" opacity="0.15"/>
+                  <rect x="20" y="100" width="60" height="60" rx="8" fill="#FF6B35" opacity="0.15"/>
+                  <rect x="100" y="100" width="60" height="60" rx="8" fill="#FF6B35" opacity="0.3"/>
+                  <text x="90" y="95" text-anchor="middle" font-size="13" fill="#6B7280">扫码添加</text>
+                  <text x="90" y="112" text-anchor="middle" font-size="13" fill="#6B7280">老师微信</text>
+                </svg>
+              </div>
+              <p class="contact__qr-text">扫码添加老师微信<br>免费获取试听资料</p>
+            </div>
+
+            <div class="contact__details">
+              <div class="contact__detail">
+                <span class="contact__detail-icon">📧</span>
+                <div>
+                  <strong>邮箱</strong>
+                  <p>contact@jima-programmer.com</p>
+                </div>
+              </div>
+              <div class="contact__detail">
+                <span class="contact__detail-icon">📱</span>
+                <div>
+                  <strong>电话</strong>
+                  <p>138-0000-0000</p>
+                </div>
+              </div>
+              <div class="contact__detail">
+                <span class="contact__detail-icon">📍</span>
+                <div>
+                  <strong>地址</strong>
+                  <p>北京市海淀区中关村软件园</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====== 8. FOOTER ====== -->
+  <footer class="footer">
+    <div class="footer__container container">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--brand">
+          <a href="#" class="footer__logo">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <rect width="36" height="36" rx="10" fill="#FF6B35"/>
+              <text x="18" y="25" text-anchor="middle" font-size="20" font-weight="900" fill="white">J</text>
+            </svg>
+            <span>吉马程序员</span>
+          </a>
+          <p class="footer__desc">实战驱动教学，让每个人都能学会编程</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="微博">WB</a>
+            <a href="#" class="footer__social" aria-label="知乎">ZH</a>
+            <a href="#" class="footer__social" aria-label="B站">BL</a>
+            <a href="#" class="footer__social" aria-label="GitHub">GH</a>
+          </div>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__heading">快速链接</h4>
+          <ul class="footer__links">
+            <li><a href="#courses">课程服务</a></li>
+            <li><a href="#portfolio">学员作品</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#blog">技术博客</a></li>
+            <li><a href="#contact">联系我们</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__heading">课程方向</h4>
+          <ul class="footer__links">
+            <li><a href="#courses">前端开发</a></li>
+            <li><a href="#courses">后端开发</a></li>
+            <li><a href="#courses">移动开发</a></li>
+            <li><a href="#courses">AI / 数据</a></li>
+            <li><a href="#courses">全部课程</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__heading">联系我们</h4>
+          <ul class="footer__links">
+            <li>📧 contact@jima-programmer.com</li>
+            <li>📱 138-0000-0000</li>
+            <li>📍 北京市海淀区中关村软件园</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; 2025 吉马程序员. 保留所有权利.</p>
+        <p>京ICP备xxxxxxxx号-1</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

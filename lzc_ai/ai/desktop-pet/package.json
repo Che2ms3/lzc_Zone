@@ -1,0 +1,14 @@
+{
+  "name": "desktop-pet",
+  "version": "1.0.0",
+  "description": "像素风桌面宠物 - 一只可爱的猫咪",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "ysw",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^42.3.0"
+  }
+}

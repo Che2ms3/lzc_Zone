@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-orange-500: #FF6B35;
+  --color-orange-600: #E55A2B;
+  --color-orange-50: #FFF5F0;
+  --color-orange-100: #FFE8DD;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid #FF6B35;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}

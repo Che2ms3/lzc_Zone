@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>迷你世界 - Mini World</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    overflow: hidden;
+    background: #000;
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  canvas { display: block; }
+
+  /* 岛屿类型选择器 */
+  #island-selector {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(255,255,255,0.95); border-radius: 20px; padding: 32px 40px;
+    text-align: center; z-index: 100; box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px); transition: opacity 0.5s, transform 0.5s;
+  }
+  #island-selector.hidden { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.9); }
+  #island-selector h2 { font-size: 28px; color: #333; margin-bottom: 8px; }
+  #island-selector p { color: #888; margin-bottom: 24px; font-size: 14px; }
+  .island-options { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .island-btn {
+    width: 140px; padding: 16px 12px; border: 3px solid #e0e0e0; border-radius: 16px;
+    background: #fff; cursor: pointer; transition: all 0.25s; outline: none;
+  }
+  .island-btn:hover { border-color: #4CAF50; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(76,175,80,0.2); }
+  .island-btn .icon { font-size: 42px; display: block; margin-bottom: 8px; }
+  .island-btn .name { font-size: 15px; font-weight: 600; color: #333; display: block; margin-bottom: 4px; }
+  .island-btn .desc { font-size: 11px; color: #999; }
+
+  /* 底部工具栏 */
+  #toolbar {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; background: rgba(255,255,255,0.92);
+    border-radius: 16px; padding: 8px 16px; z-index: 50;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
+    transition: opacity 0.4s;
+  }
+  #toolbar.hidden { opacity: 0; pointer-events: none; }
+  .tool-btn {
+    width: 52px; height: 52px; border-radius: 12px; border: 2px solid transparent;
+    background: #f5f5f5; cursor: pointer; font-size: 13px; display: flex;
+    flex-direction: column; align-items: center; justify-content: center;
+    transition: all 0.2s; outline: none; color: #555; gap: 2px;
+  }
+  .tool-btn:hover { background: #e8f5e9; border-color: #a5d6a7; }
+  .tool-btn.active { background: #c8e6c9; border-color: #4CAF50; color: #2E7D32; font-weight: 600; }
+  .tool-btn.delete-mode { background: #ffebee; border-color: #ef9a9a; color: #c62828; }
+  .tool-btn.delete-mode.active { background: #ffcdd2; border-color: #f44336; }
+  .tool-btn .emoji { font-size: 22px; line-height: 1; }
+  .tool-btn .label { font-size: 10px; }
+
+  /* 提示 */
+  #hint {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.6); color: #fff; padding: 8px 20px;
+    border-radius: 20px; font-size: 13px; z-index: 40;
+    pointer-events: none; transition: opacity 0.6s;
+  }
+
+  /* 类型切换按钮 (顶部) */
+  #type-switcher {
+    position: fixed; top: 16px; right: 16px; display: flex; gap: 6px; z-index: 50;
+  }
+  .type-btn {
+    padding: 6px 14px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.2); color: #fff; cursor: pointer;
+    font-size: 12px; backdrop-filter: blur(6px); transition: all 0.2s; outline: none;
+    font-weight: 500;
+  }
+  .type-btn:hover, .type-btn.active { background: rgba(255,255,255,0.5); border-color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- 初始选择界面 -->
+<div id="island-selector">
+  <h2>🏝️ 选择你的岛屿</h2>
+  <p>三种不同形态的天空岛屿等你来探索</p>
+  <div class="island-options">
+    <button class="island-btn" onclick="startGame(0)">
+      <span class="icon">⭕</span>
+      <span class="name">圆形山丘岛</span>
+      <span class="desc">经典圆形岛屿<br>中央隆起，边缘渐变</span>
+    </button>
+    <button class="island-btn" onclick="startGame(1)">
+      <span class="icon">🟫</span>
+      <span class="name">方形平顶岛</span>
+      <span class="desc">方正台地岛屿<br>宽阔平坦的顶部</span>
+    </button>
+    <button class="island-btn" onclick="startGame(2)">
+      <span class="icon">🌙</span>
+      <span class="name">月牙湾岛</span>
+      <span class="desc">新月形环礁岛屿<br>天然海湾和水池</span>
+    </button>
+  </div>
+</div>
+
+<!-- 底部工具栏 -->
+<div id="toolbar" class="hidden">
+  <button class="tool-btn active" data-item="tree" onclick="selectItem('tree', this)">
+    <span class="emoji">🌳</span><span class="label">树</span>
+  </button>
+  <button class="tool-btn" data-item="grass" onclick="selectItem('grass', this)">
+    <span class="emoji">🌿</span><span class="label">草</span>
+  </button>
+  <button class="tool-btn" data-item="house" onclick="selectItem('house', this)">
+    <span class="emoji">🏠</span><span class="label">房子</span>
+  </button>
+  <button class="tool-btn" data-item="stone" onclick="selectItem('stone', this)">
+    <span class="emoji">🪨</span><span class="label">石头</span>
+  </button>
+  <button class="tool-btn" data-item="water" onclick="selectItem('water', this)">
+    <span class="emoji">💧</span><span class="label">水</span>
+  </button>
+  <button class="tool-btn delete-mode" data-item="delete" onclick="selectItem('delete', this)">
+    <span class="emoji">🗑️</span><span class="label">清除</span>
+  </button>
+  <button class="tool-btn" onclick="resetIsland()">
+    <span class="emoji">🔄</span><span class="label">重置</span>
+  </button>
+</div>
+
+<!-- 顶部提示 -->
+<div id="hint">🖱️ 左键放置 · 右键旋转 · 滚轮缩放 · 按数字键 1-5 切换工具</div>
+
+<!-- 岛屿类型切换 -->
+<div id="type-switcher" class="hidden">
+  <button class="type-btn active" onclick="switchType(0, this)">⭕ 圆形岛</button>
+  <button class="type-btn" onclick="switchType(1, this)">🟫 方形岛</button>
+  <button class="type-btn" onclick="switchType(2, this)">🌙 月牙湾</button>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ============ DOM 元素 ============
+const selectorOverlay = document.getElementById('island-selector');
+const toolbar = document.getElementById('toolbar');
+const hint = document.getElementById('hint');
+const typeSwitcher = document.getElementById('type-switcher');
+
+// ============ 常量 ============
+const GRID_HALF = 11;
+const ITEMS = {
+  tree:   { color: 0x2E7D32, label: '树',   emoji: '🌳' },
+  grass:  { color: 0x66BB6A, label: '草',   emoji: '🌿' },
+  house:  { color: 0xD4A574, label: '房子', emoji: '🏠' },
+  stone:  { color: 0x9E9E9E, label: '石头', emoji: '🪨' },
+  water:  { color: 0x448AFF, label: '水',   emoji: '💧' },
+};
+
+// ============ 状态 ============
+let currentType = 0;
+let selectedItem = 'tree';
+let islandGroup, dirtInstanced, grassInstanced;
+let decorationData = [];     // { mesh, type, gridX, gridY, gridZ }
+let occupiedGrid = new Set();
+let waterPositions = [];     // track water blocks for bay regeneration
+let ghostMesh;
+let particles;
+
+// ============ Three.js 初始化 ============
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87CEEB);
+scene.fog = new THREE.Fog(0x87CEEB, 25, 70);
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 120);
+camera.position.set(14, 10, 14);
+camera.lookAt(0, 2, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+document.body.appendChild(renderer.domElement);
+
+// 光照
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+scene.add(ambientLight);
+
+const sunLight = new THREE.DirectionalLight(0xfff8e7, 3.5);
+sunLight.position.set(20, 25, 10);
+sunLight.castShadow = true;
+sunLight.shadow.mapSize.width = 1024;
+sunLight.shadow.mapSize.height = 1024;
+sunLight.shadow.camera.near = 0.5;
+sunLight.shadow.camera.far = 80;
+sunLight.shadow.camera.left = -20;
+sunLight.shadow.camera.right = 20;
+sunLight.shadow.camera.top = 20;
+sunLight.shadow.camera.bottom = -20;
+sunLight.shadow.bias = -0.0001;
+scene.add(sunLight);
+
+const fillLight = new THREE.DirectionalLight(0xb3d9ff, 1.0);
+fillLight.position.set(-8, 5, -8);
+scene.add(fillLight);
+
+// OrbitControls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 2, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 6;
+controls.maxDistance = 30;
+controls.maxPolarAngle = Math.PI * 0.6;
+controls.minPolarAngle = 0.2;
+controls.update();
+
+// ============ 材质与几何体缓存 ============
+const dirtMat = new THREE.MeshStandardMaterial({ color: 0x8B6914, roughness: 0.9, metalness: 0 });
+const grassMat = new THREE.MeshStandardMaterial({ color: 0x5D8C3E, roughness: 0.85, metalness: 0 });
+const waterMat = new THREE.MeshStandardMaterial({ color: 0x448AFF, roughness: 0.3, metalness: 0.1, transparent: true, opacity: 0.7 });
+const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6B4226, roughness: 0.8 });
+const leavesMat = new THREE.MeshStandardMaterial({ color: 0x2E7D32, roughness: 0.7 });
+const leavesMat2 = new THREE.MeshStandardMaterial({ color: 0x388E3C, roughness: 0.7 });
+const stoneMat = new THREE.MeshStandardMaterial({ color: 0x9E9E9E, roughness: 0.6, metalness: 0.1 });
+const grassTuftMat = new THREE.MeshStandardMaterial({ color: 0x66BB6A, roughness: 0.8 });
+const wallMat = new THREE.MeshStandardMaterial({ color: 0xD4A574, roughness: 0.7 });
+const roofMat = new THREE.MeshStandardMaterial({ color: 0xC62828, roughness: 0.6 });
+const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 });
+
+const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+const waterGeo = new THREE.BoxGeometry(0.9, 0.35, 0.9);
+const trunkGeo = new THREE.CylinderGeometry(0.12, 0.18, 1.4, 8);
+const leavesGeo = new THREE.ConeGeometry(0.6, 1.3, 8);
+const leavesGeo2 = new THREE.ConeGeometry(0.5, 1.0, 8);
+const stoneGeo = new THREE.IcosahedronGeometry(0.35, 0);
+const grassGeo = new THREE.ConeGeometry(0.08, 0.25, 5);
+const wallGeo = new THREE.BoxGeometry(1.3, 1.2, 1.3);
+const roofGeo = new THREE.ConeGeometry(1.1, 0.9, 4);
+const sphereGeo = new THREE.SphereGeometry(1, 7, 5);
+
+// ============ 岛屿形状函数 ============
+function getIslandHeight(gx, gz, type) {
+  const dx = gx, dz = gz;
+  const dist = Math.sqrt(dx * dx + dz * dz);
+
+  switch (type) {
+    case 0: { // 圆形山丘岛
+      const radius = 9;
+      if (dist > radius + 0.5) return 0;
+      const edgeDist = radius - dist;
+      return Math.max(1, Math.floor(edgeDist * 0.7) + 1);
+    }
+    case 1: { // 方形平顶岛
+      const half = 7;
+      const nx = Math.sin(dx * 1.3) * Math.cos(dz * 1.3) * 0.4;
+      const boundary = half + nx;
+      if (Math.abs(dx) > boundary || Math.abs(dz) > boundary) return 0;
+      const edgeDist = Math.min(boundary - Math.abs(dx), boundary - Math.abs(dz));
+      return Math.max(1, Math.floor(edgeDist * 0.55) + 2);
+    }
+    case 2: { // 月牙湾岛
+      const outerR = 9, biteX = 4.5, biteR = 4;
+      const biteDist = Math.sqrt((dx - biteX) * (dx - biteX) + dz * dz);
+      if (dist > outerR + 0.5) return 0;
+      if (biteDist < biteR - 0.5) return 0;
+      const edgeDist = Math.max(0, biteDist - biteR);
+      return Math.max(1, Math.floor(edgeDist * 0.65) + 1);
+    }
+    default: return 0;
+  }
+}
+
+function isWaterBay(gx, gz) {
+  // 月牙湾内部的水域
+  if (currentType !== 2) return false;
+  const dx = gx, dz = gz;
+  const dist = Math.sqrt(dx * dx + dz * dz);
+  const biteX = 4.5, biteR = 4;
+  const biteDist = Math.sqrt((dx - biteX) * (dx - biteX) + dz * dz);
+  return dist <= 9 && biteDist < biteR - 0.5;
+}
+
+// ============ 岛屿构建 ============
+function buildIsland(type) {
+  if (islandGroup) {
+    scene.remove(islandGroup);
+    disposeGroup(islandGroup);
+  }
+  islandGroup = new THREE.Group();
+  decorationData = [];
+  occupiedGrid = new Set();
+  waterPositions = [];
+
+  const dirtPositions = [];
+  const grassPositions = [];
+
+  // 收集所有方块位置
+  for (let gx = -GRID_HALF; gx <= GRID_HALF; gx++) {
+    for (let gz = -GRID_HALF; gz <= GRID_HALF; gz++) {
+      const h = getIslandHeight(gx, gz, type);
+      for (let gy = 0; gy < h; gy++) {
+        dirtPositions.push({ x: gx, y: gy, z: gz });
+        occupiedGrid.add(`${gx},${gy},${gz}`);
+      }
+      if (h > 0) {
+        grassPositions.push({ x: gx, y: h, z: gz });
+        occupiedGrid.add(`${gx},${h},${gz}`);
+      }
+    }
+  }
+
+  // 泥土层 InstancedMesh
+  if (dirtPositions.length > 0) {
+    dirtInstanced = new THREE.InstancedMesh(boxGeo, dirtMat, dirtPositions.length);
+    dirtInstanced.castShadow = true;
+    dirtInstanced.receiveShadow = true;
+    const dummy = new THREE.Object3D();
+    dirtPositions.forEach((p, i) => {
+      dummy.position.set(p.x, p.y, p.z);
+      dummy.updateMatrix();
+      dirtInstanced.setMatrixAt(i, dummy.matrix);
+    });
+    dirtInstanced.instanceMatrix.needsUpdate = true;
+    islandGroup.add(dirtInstanced);
+  }
+
+  // 草方块顶层 InstancedMesh
+  if (grassPositions.length > 0) {
+    grassInstanced = new THREE.InstancedMesh(boxGeo, grassMat, grassPositions.length);
+    grassInstanced.castShadow = true;
+    grassInstanced.receiveShadow = true;
+    const dummy = new THREE.Object3D();
+    grassPositions.forEach((p, i) => {
+      dummy.position.set(p.x, p.y, p.z);
+      dummy.updateMatrix();
+      grassInstanced.setMatrixAt(i, dummy.matrix);
+    });
+    grassInstanced.instanceMatrix.needsUpdate = true;
+    islandGroup.add(grassInstanced);
+  }
+
+  scene.add(islandGroup);
+
+  // 生成装饰物
+  generateSurfaceDecorations(grassPositions, type);
+
+  // 月牙湾水域
+  if (type === 2) {
+    generateBayWater();
+  }
+}
+
+// ============ 表面装饰生成 ============
+function generateSurfaceDecorations(grassPositions, type) {
+  // 收集可用表面位置（排除水域）
+  const available = grassPositions.filter(p => !isWaterBay(p.x, p.z));
+  if (available.length === 0) return;
+
+  const shuffled = [...available].sort(() => Math.random() - 0.5);
+  const used = new Set();
+  const take = (count) => {
+    const result = [];
+    for (const p of shuffled) {
+      if (result.length >= count) break;
+      const key = `${p.x},${p.z}`;
+      if (!used.has(key) && !isWaterBay(p.x, p.z)) {
+        used.add(key);
+        result.push(p);
+      }
+    }
+    return result;
+  };
+
+  // 房子 (1~2)
+  const houseCount = 1 + Math.floor(Math.random() * 2);
+  for (const p of take(houseCount)) {
+    createDecoration('house', p.x, p.y, p.z);
+  }
+
+  // 树 (8~15)
+  const treeCount = 8 + Math.floor(Math.random() * 8);
+  for (const p of take(treeCount)) {
+    createDecoration('tree', p.x, p.y, p.z);
+  }
+
+  // 石头 (4~8)
+  const stoneCount = 4 + Math.floor(Math.random() * 5);
+  for (const p of take(stoneCount)) {
+    createDecoration('stone', p.x, p.y, p.z);
+  }
+
+  // 草丛 (10~20)
+  const grassCount = 10 + Math.floor(Math.random() * 11);
+  for (const p of take(grassCount)) {
+    createDecoration('grass', p.x, p.y, p.z);
+  }
+
+  // 水池 (圆形岛和方形岛随机放置)
+  if (type !== 2) {
+    const poolCount = 2 + Math.floor(Math.random() * 3);
+    for (const p of take(poolCount)) {
+      createWaterCluster(p.x, p.y, p.z);
+    }
+  }
+}
+
+function generateBayWater() {
+  for (let gx = -GRID_HALF; gx <= GRID_HALF; gx++) {
+    for (let gz = -GRID_HALF; gz <= GRID_HALF; gz++) {
+      if (isWaterBay(gx, gz)) {
+        const key = `${gx},1,${gz}`;
+        if (!occupiedGrid.has(key)) {
+          createWaterBlock(gx, 1, gz);
+        }
+      }
+    }
+  }
+}
+
+function createWaterCluster(cx, cy, cz) {
+  const size = 1 + Math.floor(Math.random() * 3);
+  for (let dx = -size; dx <= size; dx++) {
+    for (let dz = -size; dz <= size; dz++) {
+      if (Math.abs(dx) + Math.abs(dz) <= size + 1) {
+        const wx = cx + dx, wz = cz + dz;
+        const key = `${wx},${cy},${wz}`;
+        if (!occupiedGrid.has(key) && !isWaterBay(wx, wz)) {
+          createWaterBlock(wx, cy, wz);
+        }
+      }
+    }
+  }
+}
+
+// ============ 创建装饰物 ============
+function createDecoration(type, gx, gy, gz) {
+  const group = new THREE.Group();
+  group.position.set(gx, gy, gz);
+
+  switch (type) {
+    case 'tree': {
+      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+      trunk.position.y = 0.7;
+      trunk.castShadow = true;
+      group.add(trunk);
+
+      const leaves = new THREE.Mesh(leavesGeo, leavesMat);
+      leaves.position.y = 1.7;
+      leaves.castShadow = true;
+      group.add(leaves);
+
+      const leavesTop = new THREE.Mesh(leavesGeo2, leavesMat2);
+      leavesTop.position.y = 2.4;
+      leavesTop.castShadow = true;
+      group.add(leavesTop);
+
+      // 随机微旋转
+      group.rotation.y = Math.random() * Math.PI * 2;
+      const s = 0.8 + Math.random() * 0.5;
+      group.scale.set(s, 0.8 + Math.random() * 0.4, s);
+      break;
+    }
+    case 'house': {
+      const wall = new THREE.Mesh(wallGeo, wallMat);
+      wall.position.y = 0.6;
+      wall.castShadow = true;
+      wall.receiveShadow = true;
+      group.add(wall);
+
+      const roof = new THREE.Mesh(roofGeo, roofMat);
+      roof.position.y = 1.45;
+      roof.rotation.y = Math.PI / 4;
+      roof.castShadow = true;
+      group.add(roof);
+
+      group.rotation.y = Math.random() * Math.PI * 2;
+      break;
+    }
+    case 'stone': {
+      const stone = new THREE.Mesh(stoneGeo, stoneMat);
+      stone.position.y = 0.25;
+      stone.castShadow = true;
+      const s = 0.6 + Math.random() * 0.8;
+      stone.scale.set(s, 0.4 + Math.random() * 0.5, s);
+      stone.rotation.set(Math.random() * 0.5, Math.random() * Math.PI, Math.random() * 0.5);
+      group.add(stone);
+      break;
+    }
+    case 'grass': {
+      const count = 2 + Math.floor(Math.random() * 4);
+      for (let i = 0; i < count; i++) {
+        const blade = new THREE.Mesh(grassGeo, grassTuftMat);
+        blade.position.set(
+          (Math.random() - 0.5) * 0.6,
+          0.15 + Math.random() * 0.1,
+          (Math.random() - 0.5) * 0.6
+        );
+        blade.rotation.z = (Math.random() - 0.5) * 0.4;
+        blade.rotation.x = (Math.random() - 0.5) * 0.4;
+        blade.castShadow = true;
+        group.add(blade);
+      }
+      break;
+    }
+    case 'water': {
+      createWaterBlock(gx, gy, gz);
+      return; // water block has its own function, don't add group
+    }
+  }
+
+  islandGroup.add(group);
+  decorationData.push({ mesh: group, type, gridX: gx, gridY: gy, gridZ: gz });
+  // 标记装饰物占用的空间（防止在其他装饰物上再放置）
+  occupiedGrid.add(`dec:${gx},${gy},${gz}`);
+}
+
+function createWaterBlock(gx, gy, gz) {
+  const mesh = new THREE.Mesh(waterGeo, waterMat);
+  mesh.position.set(gx, gy + 0.18, gz);
+  mesh.receiveShadow = true;
+  islandGroup.add(mesh);
+  decorationData.push({ mesh, type: 'water', gridX: gx, gridY: gy, gridZ: gz });
+  occupiedGrid.add(`dec:${gx},${gy},${gz}`);
+  waterPositions.push({ gx, gy, gz });
+}
+
+// ============ 放置物品 ============
+function placeItem(type, gx, gy, gz) {
+  // 检查该位置是否已有装饰物
+  const decKey = `dec:${gx},${gy},${gz}`;
+  if (occupiedGrid.has(decKey)) return false;
+
+  // 检查下方是否有方块支撑
+  const supportKey = `${gx},${gy - 1},${gz}`;
+  if (!occupiedGrid.has(supportKey)) return false;
+
+  if (type === 'water') {
+    createWaterBlock(gx, gy, gz);
+  } else {
+    createDecoration(type, gx, gy, gz);
+  }
+  return true;
+}
+
+function removeDecorationAt(gx, gy, gz) {
+  const decKey = `dec:${gx},${gy},${gz}`;
+  const idx = decorationData.findIndex(
+    d => d.gridX === gx && d.gridY === gy && d.gridZ === gz
+  );
+  if (idx === -1) return false;
+
+  const dec = decorationData[idx];
+  if (dec.mesh.parent) dec.mesh.parent.remove(dec.mesh);
+  if (dec.mesh.geometry) dec.mesh.geometry.dispose();
+  // Recursively dispose children
+  dec.mesh.traverse(child => {
+    if (child.geometry) child.geometry.dispose();
+  });
+  decorationData.splice(idx, 1);
+  occupiedGrid.delete(decKey);
+
+  // Also remove from waterPositions if applicable
+  if (dec.type === 'water') {
+    const wIdx = waterPositions.findIndex(p => p.gx === gx && p.gy === gy && p.gz === gz);
+    if (wIdx !== -1) waterPositions.splice(wIdx, 1);
+  }
+  return true;
+}
+
+// ============ 云朵系统 ============
+const clouds = [];
+const lowerClouds = [];
+
+function createCloud() {
+  const cloud = new THREE.Group();
+  const count = 5 + Math.floor(Math.random() * 10);
+  for (let i = 0; i < count; i++) {
+    const size = 0.5 + Math.random() * 1.3;
+    const sphere = new THREE.Mesh(sphereGeo, cloudMat);
+    sphere.scale.set(size, size * 0.55, size);
+    sphere.position.set(
+      (Math.random() - 0.5) * 4,
+      (Math.random() - 0.5) * 0.8,
+      (Math.random() - 0.5) * 2.5
+    );
+    sphere.castShadow = false;
+    cloud.add(sphere);
+  }
+  return cloud;
+}
+
+function initClouds() {
+  // 高层云
+  for (let i = 0; i < 15; i++) {
+    const cloud = createCloud();
+    cloud.position.set(
+      (Math.random() - 0.5) * 35,
+      10 + Math.random() * 12,
+      (Math.random() - 0.5) * 22
+    );
+    cloud.userData.speed = 0.3 + Math.random() * 0.6;
+    scene.add(cloud);
+    clouds.push(cloud);
+  }
+  // 低层云（岛下方）
+  for (let i = 0; i < 8; i++) {
+    const cloud = createCloud();
+    cloud.scale.set(0.7, 0.45, 0.7);
+    cloud.position.set(
+      (Math.random() - 0.5) * 35,
+      -5 + Math.random() * 3,
+      (Math.random() - 0.5) * 22
+    );
+    cloud.userData.speed = 0.2 + Math.random() * 0.4;
+    scene.add(cloud);
+    lowerClouds.push(cloud);
+  }
+}
+
+function updateClouds(dt) {
+  const allClouds = [...clouds, ...lowerClouds];
+  for (const cloud of allClouds) {
+    cloud.position.x += cloud.userData.speed * dt;
+    if (cloud.position.x > 22) {
+      cloud.position.x = -22;
+      cloud.position.z = (Math.random() - 0.5) * 22;
+    }
+  }
+}
+
+// ============ 粒子系统 ============
+function initParticles() {
+  const count = 200;
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 24;
+    positions[i * 3 + 1] = -2 + Math.random() * 16;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 24;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 16;
+  canvas.height = 16;
+  const ctx = canvas.getContext('2d');
+  const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+  gradient.addColorStop(0, 'rgba(255,255,255,0.9)');
+  gradient.addColorStop(0.4, 'rgba(255,255,255,0.4)');
+  gradient.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 16, 16);
+  const texture = new THREE.CanvasTexture(canvas);
+  const mat = new THREE.PointsMaterial({ map: texture, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.5, transparent: true });
+
+  particles = new THREE.Points(geo, mat);
+  scene.add(particles);
+}
+
+function updateParticles(dt) {
+  if (!particles) return;
+  const pos = particles.geometry.attributes.position.array;
+  for (let i = 0; i < pos.length; i += 3) {
+    pos[i + 1] += Math.sin(Date.now() * 0.001 + i) * 0.003;
+    pos[i] += Math.cos(Date.now() * 0.0015 + i) * 0.002;
+    // 循环边界
+    if (pos[i + 1] > 14) pos[i + 1] = -2;
+    if (pos[i + 1] < -3) pos[i + 1] = 14;
+  }
+  particles.geometry.attributes.position.needsUpdate = true;
+}
+
+// ============ 幽灵预览方块 ============
+function initGhostMesh() {
+  const geo = new THREE.BoxGeometry(0.95, 0.95, 0.95);
+  const mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35, depthTest: true, depthWrite: false });
+  ghostMesh = new THREE.Mesh(geo, mat);
+  ghostMesh.visible = false;
+  scene.add(ghostMesh);
+}
+
+// ============ 鼠标交互 ============
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredPos = null;
+
+function getIntersection(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const targets = [];
+  if (dirtInstanced) targets.push(dirtInstanced);
+  if (grassInstanced) targets.push(grassInstanced);
+  return raycaster.intersectObjects(targets, false);
+}
+
+function getPlacementPosition(intersection) {
+  const point = intersection.point.clone();
+  const normal = intersection.face.normal.clone();
+  const placePos = new THREE.Vector3(
+    Math.round(point.x + normal.x * 0.5),
+    Math.round(point.y + normal.y * 0.5),
+    Math.round(point.z + normal.z * 0.5)
+  );
+  // 只允许放置在表面上方（法线朝上）
+  return placePos;
+}
+
+function onMouseMove(event) {
+  const intersections = getIntersection(event);
+  if (intersections.length > 0) {
+    const placePos = getPlacementPosition(intersections[0]);
+    const gx = Math.round(placePos.x), gy = Math.round(placePos.y), gz = Math.round(placePos.z);
+    hoveredPos = { gx, gy, gz };
+
+    ghostMesh.visible = true;
+    ghostMesh.position.set(gx, gy, gz);
+
+    // 根据选中物品改变预览颜色
+    if (selectedItem === 'delete') {
+      ghostMesh.material.color.set(0xff4444);
+      ghostMesh.material.opacity = 0.4;
+    } else if (selectedItem === 'water') {
+      ghostMesh.material.color.set(0x448AFF);
+      ghostMesh.material.opacity = 0.35;
+    } else {
+      ghostMesh.material.color.set(0xffffff);
+      ghostMesh.material.opacity = 0.35;
+    }
+  } else {
+    hoveredPos = null;
+    ghostMesh.visible = false;
+  }
+}
+
+function onClick(event) {
+  if (event.button !== 0) return; // 只响应左键
+  const intersections = getIntersection(event);
+  if (intersections.length === 0) return;
+
+  const placePos = getPlacementPosition(intersections[0]);
+  const gx = Math.round(placePos.x), gy = Math.round(placePos.y), gz = Math.round(placePos.z);
+
+  if (selectedItem === 'delete') {
+    const removed = removeDecorationAt(gx, gy, gz);
+    if (!removed) {
+      // Also try removing water at slightly different Y
+      removeDecorationAt(gx, gy - 1, gz);
+    }
+  } else {
+    placeItem(selectedItem, gx, gy, gz);
+  }
+}
+
+// 防止 OrbitControls 和放置操作冲突
+let mouseMoved = false;
+renderer.domElement.addEventListener('pointerdown', (e) => { mouseMoved = false; });
+renderer.domElement.addEventListener('pointermove', (e) => {
+  if (e.buttons > 0) mouseMoved = true;
+  onMouseMove(e);
+});
+renderer.domElement.addEventListener('pointerup', (e) => {
+  if (!mouseMoved) onClick(e);
+});
+
+// 键盘快捷键
+window.addEventListener('keydown', (e) => {
+  const keys = { '1': 'tree', '2': 'grass', '3': 'house', '4': 'stone', '5': 'water', 'delete': 'delete', 'backspace': 'delete', 'r': 'delete' };
+  const item = keys[e.key.toLowerCase()];
+  if (item !== undefined) {
+    selectItem(item);
+    e.preventDefault();
+  }
+});
+
+// ============ UI 操作 ============
+window.selectItem = function(item, btnEl) {
+  selectedItem = item;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  else {
+    const target = document.querySelector(`.tool-btn[data-item="${item}"]`);
+    if (target) target.classList.add('active');
+  }
+};
+
+window.startGame = function(type) {
+  currentType = type;
+  selectorOverlay.classList.add('hidden');
+  toolbar.classList.remove('hidden');
+  typeSwitcher.classList.remove('hidden');
+  hint.style.opacity = '1';
+  buildIsland(type);
+  // 高亮对应类型按钮
+  document.querySelectorAll('.type-btn').forEach((b, i) => b.classList.toggle('active', i === type));
+  setTimeout(() => { hint.style.opacity = '0'; }, 8000);
+};
+
+window.switchType = function(type, btnEl) {
+  currentType = type;
+  buildIsland(type);
+  document.querySelectorAll('.type-btn').forEach((b, i) => b.classList.toggle('active', i === type));
+  if (btnEl) btnEl.classList.add('active');
+};
+
+window.resetIsland = function() {
+  buildIsland(currentType);
+};
+
+// ============ 清理 ============
+function disposeGroup(group) {
+  group.traverse(child => {
+    if (child.geometry && child.geometry !== boxGeo && child.geometry !== waterGeo &&
+        child.geometry !== trunkGeo && child.geometry !== leavesGeo && child.geometry !== leavesGeo2 &&
+        child.geometry !== stoneGeo && child.geometry !== grassGeo && child.geometry !== wallGeo &&
+        child.geometry !== roofGeo && child.geometry !== sphereGeo) {
+      child.geometry.dispose();
+    }
+  });
+}
+
+// ============ 响应式 ============
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ============ 动画循环 ============
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+
+  const dt = Math.min(clock.getDelta(), 0.1);
+
+  controls.update();
+  updateClouds(dt);
+  updateParticles(dt);
+
+  // 幽灵方块轻微脉动
+  if (ghostMesh && ghostMesh.visible) {
+    const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.03;
+    ghostMesh.scale.setScalar(pulse);
+  }
+
+  renderer.render(scene, camera);
+}
+
+// ============ 启动 ============
+initGhostMesh();
+initClouds();
+initParticles();
+animate();
+
+// 默认先展示圆形岛预览（在背景中）
+buildIsland(0);
+document.querySelector('.type-btn[onclick*="switchType(0)"]')?.classList.add('active');
+
+console.log('🌍 迷你世界已就绪！');
+console.log('  🖱️ 左键放置 | 右键旋转 | 滚轮缩放');
+console.log('  ⌨️ 数字键 1-5 切换工具 | R 键清除模式');
+</script>
+</body>
+</html>
