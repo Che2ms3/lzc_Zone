@@ -1,7 +1,9 @@
 // ===== 渲染进程：事件绑定 + 交互 =====
 
 const canvas = document.getElementById('pet-canvas');
-const pet = new Pet(canvas);
+// 恢复上次选择的皮肤
+const savedSkin = localStorage.getItem('pet-skin') || 'orange';
+const pet = new Pet(canvas, savedSkin);
 
 // --- 拖拽 vs 点击 ---
 let mouseDown = false;
@@ -41,9 +43,28 @@ canvas.addEventListener('contextmenu', (e) => {
   pet.feed();
 });
 
+// --- 键盘快捷键 ---
+const SKIN_KEYS = { '1': 'orange', '2': 'black', '3': 'white', '4': 'gray' };
+window.addEventListener('keydown', (e) => {
+  const skinId = SKIN_KEYS[e.key];
+  if (skinId) {
+    pet.setSkin(skinId);
+    localStorage.setItem('pet-skin', skinId);
+  }
+  if (e.key === 's' || e.key === 'S') {
+    window.electronAPI.showContextMenu();
+  }
+});
+
+// --- 接收主进程皮肤切换 ---
+window.electronAPI.onSetSkin((skinId) => {
+  pet.setSkin(skinId);
+  localStorage.setItem('pet-skin', skinId);
+});
+
 // --- 空闲检测 → SLEEPY ---
 let lastInteraction = Date.now();
-['mousedown', 'mousemove'].forEach((evt) => {
+['mousedown', 'mousemove', 'keydown'].forEach((evt) => {
   window.addEventListener(evt, () => { lastInteraction = Date.now(); });
 });
 

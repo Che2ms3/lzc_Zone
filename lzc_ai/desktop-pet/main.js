@@ -1,7 +1,14 @@
-const { app, BrowserWindow, screen, ipcMain } = require('electron');
+const { app, BrowserWindow, screen, ipcMain, Menu } = require('electron');
 const path = require('path');
 
 let win;
+
+const SKIN_OPTIONS = [
+  { id: 'orange', label: '橘猫' },
+  { id: 'black',  label: '黑猫' },
+  { id: 'white',  label: '白猫' },
+  { id: 'gray',   label: '灰猫' },
+];
 
 function createWindow() {
   const { width: screenW, height: screenH } = screen.getPrimaryDisplay().workAreaSize;
@@ -38,4 +45,27 @@ ipcMain.on('move-window', (_, { dx, dy }) => {
     const [x, y] = win.getPosition();
     win.setPosition(x + dx, y + dy);
   }
+});
+
+// 获取皮肤列表
+ipcMain.handle('get-skins', () => SKIN_OPTIONS);
+
+// 右键上下文菜单
+ipcMain.on('show-context-menu', (event) => {
+  const template = [
+    {
+      label: '切换皮肤',
+      submenu: SKIN_OPTIONS.map((skin) => ({
+        label: skin.label,
+        type: 'radio',
+        click: () => {
+          win.webContents.send('set-skin', skin.id);
+        },
+      })),
+    },
+    { type: 'separator' },
+    { label: '退出', click: () => app.quit() },
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  menu.popup({ window: win });
 });

@@ -6,22 +6,61 @@ const PIXEL = 5;       // 每个逻辑像素的实际尺寸
 const GRID_W = 32;     // 逻辑网格宽度
 const GRID_H = 38;
 
-const COLORS = {
-  body: '#FF9800',
-  dark: '#E65100',
-  belly: '#FFF3E0',
-  eye: '#4CAF50',
-  pupil: '#1B5E20',
-  nose: '#FF4081',
-  earInner: '#FFCC80',
-  mouth: '#BF360C',
+// ===== 皮肤配色方案 =====
+const SKINS = {
+  orange: {
+    name: '橘猫',
+    body: '#FF9800',
+    dark: '#E65100',
+    belly: '#FFF3E0',
+    eye: '#4CAF50',
+    pupil: '#1B5E20',
+    nose: '#FF4081',
+    earInner: '#FFCC80',
+    mouth: '#BF360C',
+  },
+  black: {
+    name: '黑猫',
+    body: '#424242',
+    dark: '#212121',
+    belly: '#757575',
+    eye: '#FFD54F',
+    pupil: '#F57F17',
+    nose: '#E57373',
+    earInner: '#616161',
+    mouth: '#212121',
+  },
+  white: {
+    name: '白猫',
+    body: '#ECEFF1',
+    dark: '#B0BEC5',
+    belly: '#FAFAFA',
+    eye: '#42A5F5',
+    pupil: '#0D47A1',
+    nose: '#F48FB1',
+    earInner: '#F5F5F5',
+    mouth: '#90A4AE',
+  },
+  gray: {
+    name: '灰猫',
+    body: '#90A4AE',
+    dark: '#546E7A',
+    belly: '#CFD8DC',
+    eye: '#66BB6A',
+    pupil: '#1B5E20',
+    nose: '#EF9A9A',
+    earInner: '#B0BEC5',
+    mouth: '#455A64',
+  },
 };
+
+const DEFAULT_SKIN = 'orange';
 
 // ===== 状态机 =====
 const State = { IDLE: 'IDLE', WALKING: 'WALKING', HAPPY: 'HAPPY', EATING: 'EATING', SLEEPY: 'SLEEPY' };
 
 class Pet {
-  constructor(canvas) {
+  constructor(canvas, skinId = DEFAULT_SKIN) {
     this.ctx = canvas.getContext('2d');
     canvas.width = CANVAS_W;
     canvas.height = CANVAS_H;
@@ -40,6 +79,15 @@ class Pet {
     this.food = null;       // 食物粒子（鱼骨头）
     this.blinkTimer = 0;
     this.eyeClosed = false;
+    this.skinId = skinId;
+    this.colors = { ...SKINS[skinId] };
+  }
+
+  setSkin(skinId) {
+    if (!SKINS[skinId]) return;
+    this.skinId = skinId;
+    this.colors = { ...SKINS[skinId] };
+    this.showBubble(SKINS[skinId].name);
   }
 
   update() {
@@ -174,106 +222,106 @@ class Pet {
 
     // --- 耳朵 ---
     const ear = (ex, ey, flip) => {
-      px(ex, ey + 4, COLORS.body);
-      px(ex, ey + 3, COLORS.body);
-      px(ex, ey + 2, COLORS.body);
-      px(ex + flip, ey + 3, COLORS.body);
-      px(ex, ey + 1, COLORS.body);
-      px(ex + flip, ey + 2, COLORS.body);
+      px(ex, ey + 4, this.colors.body);
+      px(ex, ey + 3, this.colors.body);
+      px(ex, ey + 2, this.colors.body);
+      px(ex + flip, ey + 3, this.colors.body);
+      px(ex, ey + 1, this.colors.body);
+      px(ex + flip, ey + 2, this.colors.body);
       // 耳朵内部
-      px(ex, ey + 3, COLORS.earInner);
-      px(ex, ey + 2, COLORS.earInner);
+      px(ex, ey + 3, this.colors.earInner);
+      px(ex, ey + 2, this.colors.earInner);
     };
     ear(2, 2, 1);   // 左耳
     ear(13, 2, -1); // 右耳
 
     // --- 头部 ---
     // 额头
-    px(5, 5, COLORS.body); px(6, 5, COLORS.body); px(7, 5, COLORS.body); px(8, 5, COLORS.body); px(9, 5, COLORS.body);
-    px(4, 6, COLORS.body); px(5, 6, COLORS.body); px(6, 6, COLORS.dark); px(7, 6, COLORS.dark); px(8, 6, COLORS.body); px(9, 6, COLORS.body); px(10, 6, COLORS.body);
-    px(3, 7, COLORS.body); px(4, 7, COLORS.body); px(5, 7, COLORS.body); px(6, 7, COLORS.body); px(7, 7, COLORS.body); px(8, 7, COLORS.body); px(9, 7, COLORS.body); px(10, 7, COLORS.body); px(11, 7, COLORS.body);
-    px(3, 8, COLORS.body); px(4, 8, COLORS.body); px(5, 8, COLORS.body); px(6, 8, COLORS.body); px(7, 8, COLORS.body); px(8, 8, COLORS.body); px(9, 8, COLORS.body); px(10, 8, COLORS.body); px(11, 8, COLORS.body);
+    px(5, 5, this.colors.body); px(6, 5, this.colors.body); px(7, 5, this.colors.body); px(8, 5, this.colors.body); px(9, 5, this.colors.body);
+    px(4, 6, this.colors.body); px(5, 6, this.colors.body); px(6, 6, this.colors.dark); px(7, 6, this.colors.dark); px(8, 6, this.colors.body); px(9, 6, this.colors.body); px(10, 6, this.colors.body);
+    px(3, 7, this.colors.body); px(4, 7, this.colors.body); px(5, 7, this.colors.body); px(6, 7, this.colors.body); px(7, 7, this.colors.body); px(8, 7, this.colors.body); px(9, 7, this.colors.body); px(10, 7, this.colors.body); px(11, 7, this.colors.body);
+    px(3, 8, this.colors.body); px(4, 8, this.colors.body); px(5, 8, this.colors.body); px(6, 8, this.colors.body); px(7, 8, this.colors.body); px(8, 8, this.colors.body); px(9, 8, this.colors.body); px(10, 8, this.colors.body); px(11, 8, this.colors.body);
 
     // --- 眼睛 ---
     if (this.state === State.SLEEPY) {
       // 闭眼线
-      px(5, 7, COLORS.eye); px(6, 7, COLORS.eye);
-      px(9, 7, COLORS.eye); px(10, 7, COLORS.eye);
+      px(5, 7, this.colors.eye); px(6, 7, this.colors.eye);
+      px(9, 7, this.colors.eye); px(10, 7, this.colors.eye);
     } else if (this.eyeClosed) {
-      px(5, 7, COLORS.eye); px(6, 7, COLORS.eye);
-      px(9, 7, COLORS.eye); px(10, 7, COLORS.eye);
+      px(5, 7, this.colors.eye); px(6, 7, this.colors.eye);
+      px(9, 7, this.colors.eye); px(10, 7, this.colors.eye);
     } else if (this.state === State.HAPPY) {
       // 开心弯眼
-      px(5, 7, COLORS.eye); px(6, 7, COLORS.eye);
-      px(9, 7, COLORS.eye); px(10, 7, COLORS.eye);
-      px(5, 8, COLORS.pupil);
-      px(9, 8, COLORS.pupil);
+      px(5, 7, this.colors.eye); px(6, 7, this.colors.eye);
+      px(9, 7, this.colors.eye); px(10, 7, this.colors.eye);
+      px(5, 8, this.colors.pupil);
+      px(9, 8, this.colors.pupil);
     } else {
-      px(5, 7, COLORS.eye); px(6, 7, COLORS.eye);
-      px(9, 7, COLORS.eye); px(10, 7, COLORS.eye);
-      px(5, 8, COLORS.pupil);
-      px(9, 8, COLORS.pupil);
+      px(5, 7, this.colors.eye); px(6, 7, this.colors.eye);
+      px(9, 7, this.colors.eye); px(10, 7, this.colors.eye);
+      px(5, 8, this.colors.pupil);
+      px(9, 8, this.colors.pupil);
     }
 
     // --- 鼻子 ---
-    px(7, 9, COLORS.nose); px(8, 9, COLORS.nose);
+    px(7, 9, this.colors.nose); px(8, 9, this.colors.nose);
 
     // --- 嘴巴 ---
-    px(6, 10, COLORS.mouth); px(9, 10, COLORS.mouth);
-    px(7, 10, COLORS.body); px(8, 10, COLORS.body);
+    px(6, 10, this.colors.mouth); px(9, 10, this.colors.mouth);
+    px(7, 10, this.colors.body); px(8, 10, this.colors.body);
 
     // 身体
-    px(5, 11, COLORS.body); px(6, 11, COLORS.body); px(7, 11, COLORS.body); px(8, 11, COLORS.body); px(9, 11, COLORS.body); px(10, 11, COLORS.body);
-    px(4, 12, COLORS.body); px(5, 12, COLORS.belly); px(6, 12, COLORS.belly); px(7, 12, COLORS.belly); px(8, 12, COLORS.belly); px(9, 12, COLORS.belly); px(10, 12, COLORS.belly); px(11, 12, COLORS.body);
-    px(4, 13, COLORS.body); px(5, 13, COLORS.belly); px(6, 13, COLORS.belly); px(7, 13, COLORS.belly); px(8, 13, COLORS.belly); px(9, 13, COLORS.belly); px(10, 13, COLORS.belly); px(11, 13, COLORS.body);
-    px(4, 14, COLORS.body); px(5, 14, COLORS.belly); px(6, 14, COLORS.belly); px(7, 14, COLORS.belly); px(8, 14, COLORS.belly); px(9, 14, COLORS.belly); px(10, 14, COLORS.belly); px(11, 14, COLORS.body);
-    px(5, 15, COLORS.body); px(6, 15, COLORS.body); px(7, 15, COLORS.body); px(8, 15, COLORS.body); px(9, 15, COLORS.body); px(10, 15, COLORS.body);
+    px(5, 11, this.colors.body); px(6, 11, this.colors.body); px(7, 11, this.colors.body); px(8, 11, this.colors.body); px(9, 11, this.colors.body); px(10, 11, this.colors.body);
+    px(4, 12, this.colors.body); px(5, 12, this.colors.belly); px(6, 12, this.colors.belly); px(7, 12, this.colors.belly); px(8, 12, this.colors.belly); px(9, 12, this.colors.belly); px(10, 12, this.colors.belly); px(11, 12, this.colors.body);
+    px(4, 13, this.colors.body); px(5, 13, this.colors.belly); px(6, 13, this.colors.belly); px(7, 13, this.colors.belly); px(8, 13, this.colors.belly); px(9, 13, this.colors.belly); px(10, 13, this.colors.belly); px(11, 13, this.colors.body);
+    px(4, 14, this.colors.body); px(5, 14, this.colors.belly); px(6, 14, this.colors.belly); px(7, 14, this.colors.belly); px(8, 14, this.colors.belly); px(9, 14, this.colors.belly); px(10, 14, this.colors.belly); px(11, 14, this.colors.body);
+    px(5, 15, this.colors.body); px(6, 15, this.colors.body); px(7, 15, this.colors.body); px(8, 15, this.colors.body); px(9, 15, this.colors.body); px(10, 15, this.colors.body);
 
     // --- 腿（根据状态变化）---
     if (this.state === State.WALKING) {
       const step = Math.sin(this.frame * 0.3);
       // 前腿走路
-      px(5, 16, COLORS.body); px(5, 17, COLORS.body);
-      px(6, 16 + (step > 0 ? 0 : 1), COLORS.body); px(6, 17 + (step > 0 ? 0 : 1), COLORS.body);
-      px(9, 16 + (step > 0 ? 0 : 1), COLORS.body); px(9, 17 + (step > 0 ? 0 : 1), COLORS.body);
-      px(10, 16, COLORS.body); px(10, 17, COLORS.body);
+      px(5, 16, this.colors.body); px(5, 17, this.colors.body);
+      px(6, 16 + (step > 0 ? 0 : 1), this.colors.body); px(6, 17 + (step > 0 ? 0 : 1), this.colors.body);
+      px(9, 16 + (step > 0 ? 0 : 1), this.colors.body); px(9, 17 + (step > 0 ? 0 : 1), this.colors.body);
+      px(10, 16, this.colors.body); px(10, 17, this.colors.body);
     } else if (this.state === State.EATING) {
       // 蹲坐
-      px(5, 16, COLORS.body); px(5, 17, COLORS.body);
-      px(6, 16, COLORS.body);
-      px(9, 16, COLORS.body);
-      px(10, 16, COLORS.body); px(10, 17, COLORS.body);
+      px(5, 16, this.colors.body); px(5, 17, this.colors.body);
+      px(6, 16, this.colors.body);
+      px(9, 16, this.colors.body);
+      px(10, 16, this.colors.body); px(10, 17, this.colors.body);
       // 前爪前伸
-      px(3, 14, COLORS.body); px(3, 15, COLORS.body);
-      px(12, 14, COLORS.body); px(12, 15, COLORS.body);
+      px(3, 14, this.colors.body); px(3, 15, this.colors.body);
+      px(12, 14, this.colors.body); px(12, 15, this.colors.body);
     } else if (this.state === State.HAPPY) {
       // 跳起 - 腿缩起来
-      px(4, 16, COLORS.body);
-      px(11, 16, COLORS.body);
+      px(4, 16, this.colors.body);
+      px(11, 16, this.colors.body);
     } else if (this.state === State.SLEEPY) {
       // 趴下
-      px(1, 15, COLORS.body); px(2, 15, COLORS.body); px(3, 15, COLORS.body);
-      px(4, 16, COLORS.body); px(5, 16, COLORS.body); px(6, 16, COLORS.body);
-      px(7, 16, COLORS.body); px(8, 16, COLORS.body); px(9, 16, COLORS.body);
-      px(10, 16, COLORS.body); px(11, 16, COLORS.body);
+      px(1, 15, this.colors.body); px(2, 15, this.colors.body); px(3, 15, this.colors.body);
+      px(4, 16, this.colors.body); px(5, 16, this.colors.body); px(6, 16, this.colors.body);
+      px(7, 16, this.colors.body); px(8, 16, this.colors.body); px(9, 16, this.colors.body);
+      px(10, 16, this.colors.body); px(11, 16, this.colors.body);
     } else {
       // IDLE 站立
-      px(4, 16, COLORS.body); px(4, 17, COLORS.body);
-      px(5, 16, COLORS.body); px(5, 17, COLORS.body);
-      px(6, 16, COLORS.body); px(6, 17, COLORS.body);
-      px(9, 16, COLORS.body); px(9, 17, COLORS.body);
-      px(10, 16, COLORS.body); px(10, 17, COLORS.body);
-      px(11, 16, COLORS.body); px(11, 17, COLORS.body);
+      px(4, 16, this.colors.body); px(4, 17, this.colors.body);
+      px(5, 16, this.colors.body); px(5, 17, this.colors.body);
+      px(6, 16, this.colors.body); px(6, 17, this.colors.body);
+      px(9, 16, this.colors.body); px(9, 17, this.colors.body);
+      px(10, 16, this.colors.body); px(10, 17, this.colors.body);
+      px(11, 16, this.colors.body); px(11, 17, this.colors.body);
     }
 
     // --- 尾巴 ---
     if (this.state === State.HAPPY) {
-      px(14, 12, COLORS.body); px(14, 11, COLORS.body); px(14, 10, COLORS.body); px(13, 10, COLORS.body);
+      px(14, 12, this.colors.body); px(14, 11, this.colors.body); px(14, 10, this.colors.body); px(13, 10, this.colors.body);
     } else if (this.state === State.WALKING) {
       const sway = Math.sin(this.frame * 0.4) * 2;
-      px(14, 12, COLORS.body); px(14 + sway, 11, COLORS.body); px(14 + sway * 2, 10, COLORS.body);
+      px(14, 12, this.colors.body); px(14 + sway, 11, this.colors.body); px(14 + sway * 2, 10, this.colors.body);
     } else {
-      px(14, 12, COLORS.body); px(14, 11, COLORS.body); px(13, 10, COLORS.body);
+      px(14, 12, this.colors.body); px(14, 11, this.colors.body); px(13, 10, this.colors.body);
     }
 
     // --- 呼吸起伏 (IDLE/SLEEPY) ---
