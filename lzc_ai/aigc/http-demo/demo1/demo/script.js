@@ -5,7 +5,7 @@ const endpoint =
 const headers = {
     'Content-Type': 'application/json',
     // api key 通过 带上
-    Authorization: `Bearer sk-1db9d163e32d42a09cca29dec461fa78`
+    Authorization: `Bearer DEEPSEEK_API_KEY`
 }
 
 // 请求体
