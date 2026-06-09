@@ -26,7 +26,14 @@ cpu执行时间 不能霸占，几十毫秒的轮询分配给进程时间。
 A fetch  users api 所有的用户
 B fetch  
 
-
-
-
-
+##  理解promise
+- 实例化Promise
+- 需要传递一个函数，executor
+    会立即执行，是耗时性任务的容器
+    同步，里面可以容纳异步任务
+    会得到resolve reject 两个函数能力
+- resolve 表示两个异步任务成功解决了
+    then被调用
+- reject 表示异步任务失败了
+    catch被调用
+- 在executor里面的异步任务成功解决或异常时，手动调用
