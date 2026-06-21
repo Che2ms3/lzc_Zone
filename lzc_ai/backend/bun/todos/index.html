@@ -16,14 +16,12 @@
         //         todos.innerHtml = data.map(todo => `<li>${todo.title}<li>`
         //         ).join('')
         //     })
-        async function main(){
-            // then 可读性没有特别好
-            // await 后面一般是promise 
+        async function main() {
             const res = await fetch("http://localhost:8080/todos")
             const data = await res.json();
-            todos.innerHtml = data.map(
-                todo => `<li>${todo.title}<li>`
-                ).join('')
+            todos.innerHTML = data.map(
+                todo => `<li>${todo.title}</li>`
+            ).join('')
         }
         main()
     </script>
