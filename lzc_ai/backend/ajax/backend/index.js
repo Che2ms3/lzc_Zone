@@ -1,4 +1,4 @@
-// // node 内置的http 模块 
+// node 内置的http 模块 
 // 早期的js ,特别是前端没有模块化系统 
 // function  scr
 // node 一定要上模块化方案 require + module.exports
