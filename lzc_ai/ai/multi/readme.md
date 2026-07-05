@@ -11,3 +11,10 @@
 
 ## vite
   项目脚手架
+## .env 流程
+- vite   npm
+- .env.local    VITE_QWEN_API_KEY=...
+- import.meta.env.VITE_QWEN_API_KEY
+既可以使用llm，还可以保证key 不被泄漏
+VITE 就是前端项目在工程化这块的大管家
+npm run dev VITE vite接管整个项目
