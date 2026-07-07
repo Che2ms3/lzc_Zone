@@ -13,3 +13,4 @@ const model = new ChatOpenAI({
 const response = 
   await model.invoke('棍王杯台球比赛应该设什么奖励？')
 console.log(response.content);
+
