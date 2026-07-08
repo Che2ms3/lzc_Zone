@@ -42,7 +42,7 @@ llm 工程开发的便捷性，可读性 帮助
     tools 声明 （async fn + schema（zod））
     invoke 执行 （message， tool，... ）
     4种Message 派生类
-    modelWithTools llm工作流 coze 节点之间连线 
+    modelWithTools llm工作流  比如 coze 节点之间连线 
     langchain 工作流 ChatOpenAI -> bindTools -> invoke 
     llm 工作流编排框架 
 - Agent 工作流程
@@ -58,3 +58,4 @@ llm 工程开发的便捷性，可读性 帮助
     Promise.all     find,map
     if(tool)
     try  catch 
+    
