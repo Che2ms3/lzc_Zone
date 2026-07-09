@@ -18,7 +18,7 @@ import fs from 'fs/promise';
     console.log('file1',file1Data);
     const file2Data = await fs.readFile('./file1.txt','utf-8')
     console.log('file2',file2Data);
-    const file3Data = await fs.readFile('./file1.txt','utf-8')
+    const file3Data = await fs.readFile('./file2.txt','utf-8')
     console.log('file3',file3Data);
 })();
 fs.readFile('./file1.txt','utf-8')
@@ -36,3 +36,4 @@ fs.readFile('./file1.txt','utf-8')
         console.log('file3.txt',data);
         return fs.readFile('./file3.txt','utf-8')
     })
+// 解决回调地狱

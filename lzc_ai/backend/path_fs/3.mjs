@@ -33,19 +33,19 @@ fs.readFile('./file1.txt','utf-8', (err,data) =>{
          console.log(err);
     }
     fs.readFile('./file2.txt','utf-8', (err,data) =>{
-    if(!err){
-         console.log('file2',data);
-    }else{
-         console.log(err);
-    }
-    
-    if(!err){
-         console.log('file3',data);
-    }else{
-         console.log(err);
-    }
-        
-})
+        if(!err){
+            console.log('file2',data);
+        }else{
+            console.log(err);
+        }
+        fs.readFile('./file3.txt','utf-8', (err,data) =>{
+            if(!err){
+                console.log('file3',data);
+            }else{
+                console.log(err);
+            }
+        })
+    })
 
 })
 
