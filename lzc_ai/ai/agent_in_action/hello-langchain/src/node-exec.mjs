@@ -10,7 +10,7 @@ import {
 // mini cursor  I/O, 命令行 
 // agent tool, 自动化 
 // const command = 'ls -la';  // command linux 命令 shell 脚本
-const command = 'pnpm create react-todo-app --template react-ts'
+const command = 'npx create-react-app my-ts-app --template react-ts'
 // 切一下， 第一项 cmd , rest 运算符 所有的参数数组
 const [cmd, ...args] = command.split(' ');
 const cwd = process.cwd(); // 当前工作目录
@@ -22,7 +22,7 @@ const client = spawn(cmd, args, {
     // bash 也会申请这个资源，
     // 子进程继承父进程的输入输出 直接显示在当前控制台
     stdio: 'inherit',// 命令 
-    shell: true
+    shell:true
 });
 
 let errorMsg = '';
