@@ -26,3 +26,7 @@ ai agent 是MCP 客户端（host），可以通过MCP 协议调用各种MCP Serv
 
 ## MCP Tool 
 本质tool，
+
+## resources
+- MCP stdio/http 跨进程提供 Tool/Resource
+
