@@ -76,22 +76,22 @@ const update = async () => {
   });
 
   if (stream.value) {
-    content.value = ''; //流式输出 清空内容
+    content.value = ''; // 流式输出， 清空内容
     // 响应体对象， 一批批的token 流式输出
     // 流式读取响应体 读取器 reader 
-    console.log(response.body);// readableStream
-    // 二进制流 可读流 
+    console.log(response.body);//readableStream
+    // 二进制流 可读流 ?. 
     const reader = response.body?.getReader();
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder(); 
     // 解码器 二进制流 转换为文本流
-    let done 
-    let buffer ='';
+    let done = false; // 是否读取完成
+    let buffer = '';
 
-    while(!done) { // 不同的读，直到done
+    while(!done) { //不停的读， 直到[DONE]
       // console.log(await reader.read());
       // 不要覆盖 done 读取完成状态
       // 读取到的是二进制流 unit8Array 十进制数
-      const {value,done:doneReading} = await reader.read();
+      const { value, done: doneReading } = await reader.read();
     }
   } else {
     // 非流式输出
