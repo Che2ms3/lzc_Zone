@@ -14,8 +14,8 @@
 大模型通过这些**知识库**知道了背景知识，就可以回答问题。
 
 
-RAG
-Retrieval 检索 - Augmented 增强    Generation 生成
+RAG 基础流程三段式
+Retrieval 检索   Augmented 增强    Generation 生成
 
 去知识库里**检索**用户问的知识的相关文档片段（分片，按章节，按页，按段落 一段有自然语义的段落）（embedding），作为背景知识加到Prompt里**增强**它，让大模型工具这些生成**回答**
 
