@@ -8,8 +8,8 @@ import * as cheerio from 'cheerio';
 // 去拿其中的一部分， cherrio适合的， 
 // cherrio 负责 在内存中，把html 字符串解析为DOM 树
 // DOM 关键？ 前端 cherrio
-// html 字符串-》 DOM 树结构， -》 css selector 入参=》
-// 树的遍历-》 节点返回。
+// html 字符串-> DOM 树结构， -> css selector 入参->
+// 树的遍历-> 节点返回。
 // 目标url 小蜘蛛爬取
 const targetUrl = 'https://juejin.cn/post/7660707431753678854';
 
@@ -31,3 +31,4 @@ async function crawlPage() {
 }
 
 crawlPage();
+

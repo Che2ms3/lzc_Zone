@@ -42,3 +42,4 @@ const splitDocuments =
   await textSplitter.splitDocuments(documents);
 
 console.log(splitDocuments);
+
