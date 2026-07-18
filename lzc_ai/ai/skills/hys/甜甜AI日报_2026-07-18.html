@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>甜甜的日报 - 2026-07-18</title>
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e8ecf1;
+    --tag-bg: #f1f5f9;
+    --tag-text: #475569;
+    --accent: #f97316;
+    --source-tc: #0a9e5a;
+    --source-verge: #3b82f6;
+    --source-hn: #f97316;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+    --radius: 14px;
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+    color: #fff; padding: 48px 24px 40px; text-align: center; position: relative; overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(249,115,22,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(59,130,246,0.10) 0%, transparent 50%);
+    animation: headerGlow 8s ease-in-out infinite;
+  }
+  @keyframes headerGlow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(2%, -1%); } }
+  .header-content { position: relative; z-index: 1; }
+  .header-icon { font-size: 48px; margin-bottom: 12px; display: block; filter: drop-shadow(0 2px 8px rgba(249,115,22,0.3)); }
+  .header h1 { font-size: 32px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 8px; }
+  .header h1 .accent { color: #fb923c; }
+  .header .date { font-size: 15px; color: #94a3b8; font-weight: 400; }
+  .header .stats-bar { display: flex; justify-content: center; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+  .header .stat-item { text-align: center; }
+  .header .stat-num { font-size: 28px; font-weight: 700; color: #fb923c; }
+  .header .stat-label { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+  .container { max-width: 780px; margin: 0 auto; padding: 28px 20px 60px; }
+  .tag-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .tag-filter-btn {
+    padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text-secondary); font-size: 13px;
+    cursor: pointer; transition: var(--transition); font-family: inherit;
+  }
+  .tag-filter-btn:hover { border-color: #fb923c; color: #f97316; }
+  .tag-filter-btn.active { background: #f97316; color: #fff; border-color: #f97316; }
+  .card-list { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    display: flex; background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden; cursor: pointer;
+    transition: var(--transition); border: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); border-color: #d1d5db; }
+  .card-source-bar { width: 5px; flex-shrink: 0; }
+  .card-source-bar.tc { background: var(--source-tc); }
+  .card-source-bar.verge { background: var(--source-verge); }
+  .card-source-bar.hn { background: var(--source-hn); }
+  .card-body { padding: 20px 22px; flex: 1; min-width: 0; }
+  .card-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .card-source {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 3px 8px; border-radius: 4px; color: #fff;
+  }
+  .card-source.tc { background: var(--source-tc); }
+  .card-source.verge { background: var(--source-verge); }
+  .card-source.hn { background: var(--source-hn); }
+  .card-index { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .card-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; line-height: 1.5; color: #1e293b; }
+  .card-summary { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .card-tag {
+    font-size: 12px; padding: 3px 10px; background: var(--tag-bg);
+    color: var(--tag-text); border-radius: 12px; font-weight: 500; transition: var(--transition);
+  }
+  .card-arrow {
+    display: flex; align-items: center; padding: 0 18px; color: #cbd5e1;
+    font-size: 20px; transition: var(--transition); flex-shrink: 0;
+  }
+  .card:hover .card-arrow { color: #f97316; transform: translateX(2px); }
+  .footer {
+    text-align: center; padding: 32px 20px 48px; color: var(--text-muted);
+    font-size: 13px; border-top: 1px solid var(--border); max-width: 780px; margin: 0 auto;
+  }
+  .footer .sources { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; flex-wrap: wrap; }
+  .footer .source-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .source-dot.tc { background: var(--source-tc); }
+  .source-dot.verge { background: var(--source-verge); }
+  .source-dot.hn { background: var(--source-hn); }
+  @media (max-width: 640px) {
+    .header h1 { font-size: 24px; } .card-title { font-size: 15px; }
+    .card-body { padding: 16px; } .card-arrow { display: none; } .header .stats-bar { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <span class="header-icon">🍩</span>
+    <h1><span class="accent">甜甜</span>的日报</h1>
+    <div class="date">2026年07月18日</div>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">精选资讯</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">覆盖来源</div></div>
+      <div class="stat-item"><div class="stat-num">11</div><div class="stat-label">关键标签</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tag-filter">
+    <button class="tag-filter-btn active" onclick="filterByTag('all')">全部</button>
+    <button class="tag-filter-btn" onclick="filterByTag('商业竞争')">商业竞争</button>
+    <button class="tag-filter-btn" onclick="filterByTag('融资')">融资</button>
+    <button class="tag-filter-btn" onclick="filterByTag('模型发布')">模型发布</button>
+    <button class="tag-filter-btn" onclick="filterByTag('产品发布')">产品发布</button>
+    <button class="tag-filter-btn" onclick="filterByTag('政策监管')">政策监管</button>
+    <button class="tag-filter-btn" onclick="filterByTag('AI安全')">AI安全</button>
+    <button class="tag-filter-btn" onclick="filterByTag('开源')">开源</button>
+    <button class="tag-filter-btn" onclick="filterByTag('机器人')">机器人</button>
+    <button class="tag-filter-btn" onclick="filterByTag('安全漏洞')">安全漏洞</button>
+    <button class="tag-filter-btn" onclick="filterByTag('芯片')">芯片</button>
+    <button class="tag-filter-btn" onclick="filterByTag('AI应用')">AI应用</button>
+  </div>
+
+  <div class="card-list">
+
+    <!-- #1 Apple sues OpenAI -->
+    <a class="card" href="https://on.theverge.com/podcast/967244/apple-openai-lawsuit-vergecast" target="_blank" rel="noopener" data-tags="商业竞争,AI安全">
+      <div class="card-source-bar verge"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source verge">The Verge</span><span class="card-index">#1</span></div>
+        <div class="card-title">Apple 起诉 OpenAI 窃取商业机密，诉状细节曝光</div>
+        <div class="card-summary">The Verge 披露了 Apple 诉 OpenAI 案更多细节：诉状措辞激烈，指控 OpenAI 挖走前员工并获取原型硬件与机密技术文档。The Vergecast 分析称此诉状"可读且有力"，业内看法两极——有人认为是行业惯例，也有人认为 Apple 确实感到威胁。此案恰逢 OpenAI 安全主管等多位高管接连离职，时机极为微妙。</div>
+        <div class="card-tags"><span class="card-tag">商业竞争</span><span class="card-tag">AI安全</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #2 Databricks $188B -->
+    <a class="card" href="https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act/" target="_blank" rel="noopener" data-tags="融资,商业竞争">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#2</span></div>
+        <div class="card-title">Databricks 估值冲至 1880 亿美元，AI 时代的"第二春"持续升温</div>
+        <div class="card-summary">Databricks 宣布由 Coatue 领投的新一轮融资，估值达 1880 亿美元，为 18 个月内第四轮大型融资。公司已从大数据 SaaS 成功转型为 AI 领域核心玩家，力推中国开源模型 Z.ai GLM 5.2 用于企业级 AI 编程，以成本优势切入企业市场。</div>
+        <div class="card-tags"><span class="card-tag">融资</span><span class="card-tag">商业竞争</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #3 Anthropic + Blackstone Ode -->
+    <a class="card" href="https://techcrunch.com/2026/07/15/anthropic-blackstone-bet-the-next-trillion-dollar-ai-business-is-implementation-not-models/" target="_blank" rel="noopener" data-tags="融资,AI应用">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#3</span></div>
+        <div class="card-title">Anthropic 联手 Blackstone 成立 "Ode" 合资公司，押注 AI 落地服务万亿市场</div>
+        <div class="card-summary">Anthropic 与 Blackstone 公布 15 亿美元合资企业正式名称为 "Ode with Anthropic"，核心模式是派遣顶级工程师入驻企业客户，帮助其真正用起来 AI。双方认为 AI 的未来价值不在模型本身，而在实施落地服务——这可能是一个万亿美元级别的市场。</div>
+        <div class="card-tags"><span class="card-tag">融资</span><span class="card-tag">AI应用</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #4 Mistral Robostral -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="模型发布,机器人,开源">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#4</span></div>
+        <div class="card-title">Mistral 发布 Robostral Navigate：硬件无关的单摄像头机器人导航模型</div>
+        <div class="card-summary">法国 AI 公司 Mistral 推出 Robostral Navigate，一个硬件无关的机器人导航视觉语言模型，仅需单摄像头和自然语言提示即可实现环境导航。该模型不绑定特定机器人平台，大幅降低了机器人导航的开发门槛，在 HN 引发对通用机器人 AI 的广泛讨论。</div>
+        <div class="card-tags"><span class="card-tag">模型发布</span><span class="card-tag">机器人</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #5 OpenAI voice + Codex Micro -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="模型发布,产品发布">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#5</span></div>
+        <div class="card-title">OpenAI 发布新一代语音模型，同步推出 Codex Micro 宏键盘</div>
+        <div class="card-summary">OpenAI 发布全新语音模型，支持更自然的实时对话交互。同日推出硬件产品 Codex Micro——一款售价 230 美元的可编程宏键盘，专为 AI 辅助编程场景设计，引发开发者社区对"AI 公司做硬件"的热议。</div>
+        <div class="card-tags"><span class="card-tag">模型发布</span><span class="card-tag">产品发布</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #6 Google NotebookLM → Gemini Notebook -->
+    <a class="card" href="https://news.filehippo.com/2026/07/july-18-tech-news-roundup-apple-sues-openai-notebooklm-renamed-to-gemini-notebook-eu-orders-google-to-open-android-and-search-to-competitors/" target="_blank" rel="noopener" data-tags="产品发布">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#6</span></div>
+        <div class="card-title">Google 将 NotebookLM 更名为 Gemini Notebook，新增原生代码执行</div>
+        <div class="card-summary">Google 正式将 NotebookLM 并入 Gemini 品牌，更名为 Gemini Notebook，并新增原生代码执行功能。这一整合标志着 Google 将 AI 笔记、研究和编程能力进一步深度融合至 Gemini 生态，提升对开发者和研究人员的吸引力。</div>
+        <div class="card-tags"><span class="card-tag">产品发布</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #7 Prime Intellect -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="融资">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#7</span></div>
+        <div class="card-title">Prime Intellect 获 1.3 亿美元 A 轮融资，估值 10 亿，押注企业 AI Agent 基础设施</div>
+        <div class="card-summary">AI 基础设施初创公司 Prime Intellect 完成 1.3 亿美元 A 轮融资，估值达 10 亿美元。该公司专注于为企业 AI Agent 提供底层基础设施，这一轮融资也反映出资本市场对 AI Agent 赛道从"概念"走向"基建落地"的信心。</div>
+        <div class="card-tags"><span class="card-tag">融资</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #8 Apple surpasses NVIDIA -->
+    <a class="card" href="https://www.itbitget.com/news/detail/12560605516153" target="_blank" rel="noopener" data-tags="商业竞争,芯片">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#8</span></div>
+        <div class="card-title">Apple 市值短暂超越 NVIDIA，登顶全球第一</div>
+        <div class="card-summary">Apple 市值一度触及约 4.9 万亿美元，短暂超越 NVIDIA 成为全球市值最高公司。其"轻资产"AI 策略受到市场认可——AI 资本支出仅占营收 2.5%，远低于超大规模云厂商的 39%。在 Apple Intelligence 入华获批、Siri AI 公测等利好叠加下，投资者看好 Apple 以软件和服务撬动 AI 变现的路径。</div>
+        <div class="card-tags"><span class="card-tag">商业竞争</span><span class="card-tag">芯片</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #9 EU vs Google -->
+    <a class="card" href="https://news.filehippo.com/2026/07/july-18-tech-news-roundup-apple-sues-openai-notebooklm-renamed-to-gemini-notebook-eu-orders-google-to-open-android-and-search-to-competitors/" target="_blank" rel="noopener" data-tags="政策监管,商业竞争">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#9</span></div>
+        <div class="card-title">EU 根据《数字市场法》要求 Google 向竞品 AI 助手开放 Android 和搜索</div>
+        <div class="card-summary">欧盟依据《数字市场法》(DMA) 正式要求 Google 将 Android 系统和搜索服务向竞争对手的 AI 助手开放接入。这一决定可能重塑移动 AI 生态，让第三方 AI 助手获得与 Google Assistant/Gemini 平等的系统级权限，对全球 AI 应用分发格局影响深远。</div>
+        <div class="card-tags"><span class="card-tag">政策监管</span><span class="card-tag">商业竞争</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #10 Microsoft vs partners -->
+    <a class="card" href="https://techcrunch.com/2026/07/15/microsoft-is-reportedly-training-salespeople-to-talk-down-openai-and-anthropic/" target="_blank" rel="noopener" data-tags="商业竞争">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#10</span></div>
+        <div class="card-title">微软培训销售团队贬低 OpenAI 和 Anthropic，AI 联盟裂痕加深</div>
+        <div class="card-summary">微软被曝举行内部战略会议，指导销售团队在对企沟通中系统性贬低 OpenAI、Google 和 Anthropic 的 AI 产品，力推自家 Copilot。与此同时，微软已着手将 Word、Excel 中的 OpenAI 和 Anthropic 模型替换为自研模型。其与 OpenAI 超过 130 亿美元的投资关系正面临前所未有的紧张。</div>
+        <div class="card-tags"><span class="card-tag">商业竞争</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #11 Apple Intelligence in China -->
+    <a class="card" href="https://techcrunch.com/2026/07/16/apple-intelligence-approved-for-launch-in-china-with-alibabas-qwen-ai/" target="_blank" rel="noopener" data-tags="政策监管,产品发布">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#11</span></div>
+        <div class="card-title">Apple Intelligence 获批入华：阿里通义千问 + 百度双合作路线</div>
+        <div class="card-summary">继网信办批准后，Apple 不仅与阿里巴巴（通义千问 Qwen）达成合作，百度也确认正为 iPhone 中国用户开发 AI 功能。双供应商策略为 Apple 在中国最大手机市场提供了更多灵活性，阿里股价因此消息大涨超 6%。</div>
+        <div class="card-tags"><span class="card-tag">政策监管</span><span class="card-tag">产品发布</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #12 Google AI Mode -->
+    <a class="card" href="https://techcrunch.com/2026/07/16/googles-ai-mode-now-lets-you-link-and-interact-with-select-apps/" target="_blank" rel="noopener" data-tags="产品发布,AI应用">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#12</span></div>
+        <div class="card-title">Google AI Mode 集成 Instacart/Canva/YouTube，从问答迈向任务执行</div>
+        <div class="card-summary">Google AI Mode 新增第三方应用深度集成，用户可直接在对话界面中操作 Instacart 购物车、保存 Canva 设计、管理 YouTube Music 播放列表。这标志着 AI 搜索从"回答问题"正式进化到"完成任务"，与 ChatGPT 和 Claude 的应用生态竞争进一步白热化。</div>
+        <div class="card-tags"><span class="card-tag">产品发布</span><span class="card-tag">AI应用</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="sources">
+    <span><span class="source-dot tc"></span>TechCrunch</span>
+    <span><span class="source-dot verge"></span>The Verge</span>
+    <span><span class="source-dot hn"></span>Hacker News</span>
+  </div>
+  <p>甜甜的日报 · 每日AI精选 · 2026年07月18日 · 由 AI 自动生成，仅供参考</p>
+</div>
+
+<script>
+function filterByTag(tag) {
+  document.querySelectorAll('.tag-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === tag || (tag === 'all' && btn.textContent === '全部'));
+  });
+  document.querySelectorAll('.card').forEach(card => {
+    if (tag === 'all') { card.style.display = ''; return; }
+    const tags = card.dataset.tags || '';
+    card.style.display = tags.split(',').includes(tag) ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>

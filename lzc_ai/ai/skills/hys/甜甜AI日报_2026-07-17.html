@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>甜甜的日报 - 2026-07-17</title>
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e8ecf1;
+    --tag-bg: #f1f5f9;
+    --tag-text: #475569;
+    --accent: #f97316;
+    --source-tc: #0a9e5a;
+    --source-verge: #3b82f6;
+    --source-hn: #f97316;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+    --radius: 14px;
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(249,115,22,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(59,130,246,0.10) 0%, transparent 50%);
+    animation: headerGlow 8s ease-in-out infinite;
+  }
+  @keyframes headerGlow {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2%, -1%); }
+  }
+  .header-content { position: relative; z-index: 1; }
+  .header-icon { font-size: 48px; margin-bottom: 12px; display: block; filter: drop-shadow(0 2px 8px rgba(249,115,22,0.3)); }
+  .header h1 { font-size: 32px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 8px; }
+  .header h1 .accent { color: #fb923c; }
+  .header .date { font-size: 15px; color: #94a3b8; font-weight: 400; }
+  .header .stats-bar { display: flex; justify-content: center; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+  .header .stat-item { text-align: center; }
+  .header .stat-num { font-size: 28px; font-weight: 700; color: #fb923c; }
+  .header .stat-label { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  .tag-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .tag-filter-btn {
+    padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text-secondary); font-size: 13px;
+    cursor: pointer; transition: var(--transition); font-family: inherit;
+  }
+  .tag-filter-btn:hover { border-color: #fb923c; color: #f97316; }
+  .tag-filter-btn.active { background: #f97316; color: #fff; border-color: #f97316; }
+
+  .card-list { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    display: flex; background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden; cursor: pointer;
+    transition: var(--transition); border: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); border-color: #d1d5db; }
+  .card:focus-visible { outline: 2px solid #f97316; outline-offset: 2px; }
+
+  .card-source-bar { width: 5px; flex-shrink: 0; }
+  .card-source-bar.tc { background: var(--source-tc); }
+  .card-source-bar.verge { background: var(--source-verge); }
+  .card-source-bar.hn { background: var(--source-hn); }
+
+  .card-body { padding: 20px 22px; flex: 1; min-width: 0; }
+  .card-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .card-source {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 3px 8px; border-radius: 4px; color: #fff;
+  }
+  .card-source.tc { background: var(--source-tc); }
+  .card-source.verge { background: var(--source-verge); }
+  .card-source.hn { background: var(--source-hn); }
+  .card-index { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .card-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; line-height: 1.5; color: #1e293b; }
+  .card-summary { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .card-tag {
+    font-size: 12px; padding: 3px 10px; background: var(--tag-bg);
+    color: var(--tag-text); border-radius: 12px; font-weight: 500; transition: var(--transition);
+  }
+  .card-tag:hover { background: #e2e8f0; }
+  .card-arrow {
+    display: flex; align-items: center; padding: 0 18px; color: #cbd5e1;
+    font-size: 20px; transition: var(--transition); flex-shrink: 0;
+  }
+  .card:hover .card-arrow { color: #f97316; transform: translateX(2px); }
+
+  .footer {
+    text-align: center; padding: 32px 20px 48px; color: var(--text-muted);
+    font-size: 13px; border-top: 1px solid var(--border); max-width: 780px; margin: 0 auto;
+  }
+  .footer .sources { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; flex-wrap: wrap; }
+  .footer .source-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .source-dot.tc { background: var(--source-tc); }
+  .source-dot.verge { background: var(--source-verge); }
+  .source-dot.hn { background: var(--source-hn); }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 24px; }
+    .card-title { font-size: 15px; }
+    .card-body { padding: 16px; }
+    .card-arrow { display: none; }
+    .header .stats-bar { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <span class="header-icon">🍩</span>
+    <h1><span class="accent">甜甜</span>的日报</h1>
+    <div class="date">2026年07月17日</div>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">精选资讯</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">覆盖来源</div></div>
+      <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">关键标签</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tag-filter">
+    <button class="tag-filter-btn active" onclick="filterByTag('all')">全部</button>
+    <button class="tag-filter-btn" onclick="filterByTag('模型发布')">模型发布</button>
+    <button class="tag-filter-btn" onclick="filterByTag('商业竞争')">商业竞争</button>
+    <button class="tag-filter-btn" onclick="filterByTag('融资')">融资</button>
+    <button class="tag-filter-btn" onclick="filterByTag('开源')">开源</button>
+    <button class="tag-filter-btn" onclick="filterByTag('产品发布')">产品发布</button>
+    <button class="tag-filter-btn" onclick="filterByTag('政策监管')">政策监管</button>
+    <button class="tag-filter-btn" onclick="filterByTag('AI安全')">AI安全</button>
+    <button class="tag-filter-btn" onclick="filterByTag('安全漏洞')">安全漏洞</button>
+    <button class="tag-filter-btn" onclick="filterByTag('芯片')">芯片</button>
+    <button class="tag-filter-btn" onclick="filterByTag('AI应用')">AI应用</button>
+  </div>
+
+  <div class="card-list">
+
+    <!-- #1 -->
+    <a class="card" href="https://techcrunch.com/2026/07/16/googles-ai-mode-now-lets-you-link-and-interact-with-select-apps/" target="_blank" rel="noopener" data-tags="模型发布">
+      <div class="card-source-bar verge"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source verge">The Verge</span><span class="card-index">#1</span></div>
+        <div class="card-title">OpenAI GPT-5.6 系列正式发布，安全主管同期离职</div>
+        <div class="card-summary">OpenAI 推出 GPT-5.6 系列，包含旗舰模型 Sol、中端 Terra 和快速版 Luna，特朗普政府已批准其公开发布。但同期安全主管 Johannes Heidecke、首席未来学家 Joshua Achiam 和 AGI 负责人 Fidji Simo 相继离职，Greg Brockman 接手产品工作。此外，OpenAI 宣布关停 ChatGPT 浏览器、推出 ChatGPT 托管站点，并预告全新 ChatGPT Voice。</div>
+        <div class="card-tags"><span class="card-tag">模型发布</span><span class="card-tag">AI安全</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #2 -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="模型发布,开源">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#2</span></div>
+        <div class="card-title">Anthropic 发布 Claude Sonnet 5 与 Claude Science</div>
+        <div class="card-summary">Anthropic 发布 Claude Sonnet 5 模型，并推出全新产品线 Claude Science，面向科研场景。同期 Claude Code 被发现存在隐写标记机制，引发社区对 AI 工具透明度的讨论。Godot 游戏引擎宣布不再接受 AI 生成的代码贡献。</div>
+        <div class="card-tags"><span class="card-tag">模型发布</span><span class="card-tag">开源</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #3 -->
+    <a class="card" href="https://techcrunch.com/2026/07/15/microsoft-is-reportedly-training-salespeople-to-talk-down-openai-and-anthropic/" target="_blank" rel="noopener" data-tags="商业竞争">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#3</span></div>
+        <div class="card-title">微软培训销售团队贬低 OpenAI 和 Anthropic，AI 合作伙伴关系破裂</div>
+        <div class="card-summary">微软正培训其销售团队在与企业客户沟通时贬低 OpenAI 和 Anthropic，转而力推自家 Azure AI 平台和 Copilot。执行 VP Jay Parikh 称"别人卖零件，我们卖端到端系统"。这一举动意味着微软与其投资超 130 亿美元的 OpenAI 关系急剧恶化，此前微软已将 Word、Excel 中的 OpenAI/Anthropic 模型替换为自研模型。</div>
+        <div class="card-tags"><span class="card-tag">商业竞争</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #4 -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="商业竞争,AI安全">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#4</span></div>
+        <div class="card-title">Apple 起诉 OpenAI 窃取硬件机密，登顶 HN 热议</div>
+        <div class="card-summary">Apple 正式起诉 OpenAI 及多名前 Apple 员工，指控其窃取机密硬件设计、供应商资源和内部文档，用于加速 OpenAI 的硬件设备研发。该新闻以 1612 点赞、920 条评论成为本周 HN 最热话题，凸显了科技巨头之间围绕 AI 硬件的激烈人才与知识产权争夺。</div>
+        <div class="card-tags"><span class="card-tag">商业竞争</span><span class="card-tag">AI安全</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #5 -->
+    <a class="card" href="https://techcrunch.com/2026/07/14/deepseek-reportedly-in-talks-to-raise-1-5b-then-ipo/" target="_blank" rel="noopener" data-tags="融资">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#5</span></div>
+        <div class="card-title">DeepSeek 洽谈 15 亿美元融资，估值约 710 亿，计划 2027 年 IPO</div>
+        <div class="card-summary">中国 AI 独角兽 DeepSeek 正在洽谈新一轮 15 亿美元融资，估值约 710 亿美元，并计划 2027 年 IPO（最早可能 2026 年底）。一个月前 DeepSeek 刚完成 70 亿美元融资（估值约 500 亿）。6 月数据显示，DeepSeek 在企业 AI 网关 Vercel 上的 token 处理量占比近 23%，仅次于 Anthropic 的 32%。</div>
+        <div class="card-tags"><span class="card-tag">融资</span><span class="card-tag">商业竞争</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #6 -->
+    <a class="card" href="https://techcrunch.com/2026/07/15/apple-intelligence-approved-for-launch-in-china-with-alibabas-qwen-ai/" target="_blank" rel="noopener" data-tags="政策监管,产品发布">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#6</span></div>
+        <div class="card-title">Apple Intelligence 获批入华，将集成阿里通义千问 Qwen</div>
+        <div class="card-summary">中国网信办正式批准 Apple Intelligence 入华，将在 iOS、iPadOS、macOS 和 visionOS 中集成阿里巴巴的通义千问（Qwen）AI 模型。此前 Apple 与百度、DeepSeek、字节跳动的接洽均未达成合作。消息公布后阿里巴巴股价上涨超 6%，标志着 Apple 在全球最重要手机市场的 AI 战略迈出关键一步。</div>
+        <div class="card-tags"><span class="card-tag">政策监管</span><span class="card-tag">产品发布</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #7 -->
+    <a class="card" href="https://techcrunch.com/2026/07/14/apple-opens-its-new-siri-ai-to-everyone-with-the-ios-27-public-beta/" target="_blank" rel="noopener" data-tags="产品发布">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#7</span></div>
+        <div class="card-title">Apple Siri AI 重大升级，iOS 27 公测版正式开放</div>
+        <div class="card-summary">Apple 发布史上最大 Siri 改版，通过 iOS 27 公测版向所有用户开放。新版 Siri 升级为基于 Apple Intelligence 的完整 AI 助手，可访问设备端数据（邮件、照片、消息）、响应屏幕内容，并拥有独立 App。其模型基于 Google Gemini 蒸馏并针对 Apple Silicon 优化，通过 Private Cloud Compute 确保隐私安全。</div>
+        <div class="card-tags"><span class="card-tag">产品发布</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #8 -->
+    <a class="card" href="https://techcrunch.com/2026/07/14/the-real-ai-race-may-no-longer-be-at-the-frontier-open-models-hugging-face/" target="_blank" rel="noopener" data-tags="开源,商业竞争">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#8</span></div>
+        <div class="card-title">开源模型冲击闭源格局：中国模型占 Hugging Face 41% 下载量</div>
+        <div class="card-summary">Hugging Face 数据显示，中国开源模型今年春季已占平台下载量的 41%，首次超越美国模型。OpenRouter 上最受欢迎的 Top 6 模型全部来自中国公司（腾讯、小米、DeepSeek、MiniMax 等），Anthropic Claude Opus 4.7 仅排第 7。Hugging Face CEO 警告"AI 领域最大的风险是权力集中"，认为定制化、更便宜的开放模型才是未来。</div>
+        <div class="card-tags"><span class="card-tag">开源</span><span class="card-tag">商业竞争</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #9 -->
+    <a class="card" href="https://techcrunch.com/2026/07/16/googles-ai-mode-now-lets-you-link-and-interact-with-select-apps/" target="_blank" rel="noopener" data-tags="产品发布,AI应用">
+      <div class="card-source-bar tc"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source tc">TechCrunch</span><span class="card-index">#9</span></div>
+        <div class="card-title">Google AI Mode 新增应用集成，从问答迈向任务执行</div>
+        <div class="card-summary">Google 对话式搜索 AI Mode 新增应用集成功能，用户可直接关联 Instacart、Canva、YouTube 等应用，在对话界面内完成添加购物车、保存播放列表等实际任务。这标志着 AI Mode 从纯问答工具向任务执行平台的转变，目前已向美国用户逐步推送。</div>
+        <div class="card-tags"><span class="card-tag">产品发布</span><span class="card-tag">AI应用</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #10 -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="模型发布,开源">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#10</span></div>
+        <div class="card-title">xAI 发布 Grok 4.5，Grok Build 开源引发安全争议</div>
+        <div class="card-summary">xAI 发布 Grok 4.5，在编程和推理能力上被视为 GPT 和 Claude 的有力竞争者，也是首个适合严肃软件开发的 Grok 版本。同时 xAI 开源了 Grok Build（终端编码 Agent，Rust 编写），但随后被发现 CLI 工具默认上传完整仓库、Git 历史和未脱敏密钥，引发对 AI 编码工具泄露商业机密的激烈讨论。</div>
+        <div class="card-tags"><span class="card-tag">模型发布</span><span class="card-tag">开源</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #11 -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="安全漏洞,AI应用">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#11</span></div>
+        <div class="card-title">AI 发现潜伏 15 年的 Linux 内核漏洞 GhostLock，获 Google 9.2 万美元奖励</div>
+        <div class="card-summary">Nebula Security 的 AI 驱动工具 VEGA 发现了一个自 2011 年就存在于 Linux 内核的提权漏洞 GhostLock（CVE-2026-43499）。Google KernelCTF 为此颁发 92,337 美元奖金。此前还有报告显示，一名攻击者利用 AI 自动化在 72 小时内成功攻破 AWS 云环境，而此类攻击通常需要数周时间。</div>
+        <div class="card-tags"><span class="card-tag">安全漏洞</span><span class="card-tag">AI应用</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- #12 -->
+    <a class="card" href="https://news.ycombinator.com/" target="_blank" rel="noopener" data-tags="安全漏洞,AI安全">
+      <div class="card-source-bar hn"></div>
+      <div class="card-body">
+        <div class="card-meta"><span class="card-source hn">Hacker News</span><span class="card-index">#12</span></div>
+        <div class="card-title">HalluSquatting 攻击利用 AI 编码助手幻觉安装恶意软件</div>
+        <div class="card-summary">安全研究人员发现新型攻击手法 HalluSquatting：攻击者注册 AI 编码助手"幻觉"出的虚假包名，当开发工具推荐不存在的依赖包时，用户实际安装的是攻击者预先布置的恶意软件，可能导致 botnet 感染。同期 GitHub Agentic Workflows 也被发现可通过 prompt 注入泄露私有仓库内容，GitHub 已推出 AI 安全检测功能应对此类威胁。</div>
+        <div class="card-tags"><span class="card-tag">安全漏洞</span><span class="card-tag">AI安全</span></div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="sources">
+    <span><span class="source-dot tc"></span>TechCrunch</span>
+    <span><span class="source-dot verge"></span>The Verge</span>
+    <span><span class="source-dot hn"></span>Hacker News</span>
+  </div>
+  <p>甜甜的日报 · 每日AI精选 · 2026年07月17日 · 由 AI 自动生成，仅供参考</p>
+</div>
+
+<script>
+function filterByTag(tag) {
+  document.querySelectorAll('.tag-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === tag || (tag === 'all' && btn.textContent === '全部'));
+  });
+  document.querySelectorAll('.card').forEach(card => {
+    if (tag === 'all') { card.style.display = ''; return; }
+    const tags = card.dataset.tags || '';
+    card.style.display = tags.split(',').includes(tag) ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
