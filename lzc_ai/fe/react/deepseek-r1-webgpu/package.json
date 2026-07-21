@@ -1,0 +1,17 @@
+{
+  "name": "deepseek-r1-webgpu",
+  "version": "1.0.0",
+  "description": "简历中的超燃项目，将覆盖以下功能 ## 端侧模型 有区别于OpenAI\\deepseek API 调用，llm在远程，和调用客户端不在一起 - 贵 - 不安全   context会随着请求发送到",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.1.5"
+  }
+}
