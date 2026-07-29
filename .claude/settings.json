@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const pkg = require\\('/Users/cheems23/Desktop/WorkSpase/lzc_ai/ai/agent_in_action/tlbb/node_modules/@langchain/community/package.json'\\); console.log\\(JSON.stringify\\(pkg.exports, null, 2\\)\\)\")",
+      "Bash(node -e \"const ts = require\\('/Users/cheems23/Desktop/WorkSpase/lzc_ai/ai/agent_in_action/tlbb/node_modules/@langchain/textsplitters'\\); console.log\\(Object.keys\\(ts\\).filter\\(k => k.includes\\('Recursive'\\) || k.includes\\('Split'\\)\\)\\)\")",
+      "Bash(nslookup in01-72f5a48449d6f11.ali-cn-hangzhou.vectordb.zilliz.com.cn)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" --connect-timeout 5 \"https://in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn:443\")",
+      "Bash(node -e ' *)",
+      "Bash(nslookup in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn)",
+      "Bash(nc -zv -w 5 120.55.41.17 443)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X GET \"https://in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn:443/health\")",
+      "Bash(curl -s -X POST https://in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn:443/v2/vectordb/collections/list -H 'Authorization: Bearer 8c28c7cb1e2fb23e386c65cf61e8c0a1439b4af7c7f906cecef0a3f9a5ae675b9c94a87ded563617d002954608463f28fee8545f' -H 'Content-Type: application/json' -d '{}')"
+    ]
+  }
+}
