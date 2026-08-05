@@ -28,3 +28,26 @@
   )的数据状态。
   数据和界面统一的，不能出问题。
   
+## 前端本地存储
+- 浏览器 有期间 存内容
+  - 浏览器缓存静态资源
+  - localStorage key: value 配置、关键
+  数据 5M左右大小
+    - setItem(key, 字符串 JSON.
+    stringify(obj))
+    - getItem(key)
+  - 前端也有类似Mysql数据库 存储更多数据
+  IndexDB
+
+## useEffect
+- 生命周期
+- 挂载后 mounted
+[]
+- 挂载及更新后
+[todos] 少写很多业务带来
+- 挂载，任何项更新都执行
+- 卸载前
+第二个参数不传
+effect 作用
+副作用？ 太多的生命周期或者状态改变
+副带存储一下，清理垃圾....
