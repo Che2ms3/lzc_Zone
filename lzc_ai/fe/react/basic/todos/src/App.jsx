@@ -10,6 +10,15 @@ import './App.css';
 const App = () => {
 
   const Demo = () =>{
+    useEffect(() => {
+      const interval = setInterval(() => {
+        console.log('定时器执行了');
+      }, 1000);
+      return () => {
+        clearInterval('组件卸载前执行,做什么清理工作');
+        clearInterval(interval);
+      }
+    }, [])
     return (
       <>
       Demo
@@ -18,7 +27,7 @@ const App = () => {
   }
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState(() => {
-    return JSON.parse(localStorage.getItem('todos'))
+    return JSON.parse(localStorage.getItem('todos'))||[]
   }) 
   // 副作用 生命周期
   useEffect(() => {
