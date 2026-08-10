@@ -1,0 +1,33 @@
+.form-item {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-item label {
+  width: 60px;
+  text-align: right;
+}
+
+.form-item input {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+button[type="submit"] {
+  margin-left: 68px;
+  padding: 6px 16px;
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
