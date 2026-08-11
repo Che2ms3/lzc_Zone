@@ -1,0 +1,4 @@
+{
+  "typescript.tsdk": "lzc_ai/ai/webgpu-deepseek/deepseek-r1-webgpu/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
