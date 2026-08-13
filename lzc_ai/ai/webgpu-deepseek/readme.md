@@ -23,3 +23,15 @@ web 下载到浏览器本地（慢）-> 浏览器缓存
 ## 引入webworker
 
 
+## load
+- 空值合并运算符
+  ？？= 用于在变量为null或undefined时，赋值。
+  如果变量为false或者其他值，则不赋值。
+  用于避免重复赋值，保持变量的原始值。AutoTokenizer.from_pretrained
+  开销比较大
+- web 异步下载 
+  AutoTokenizer.from_pretrained promise
+  文件比较大，文件的chunk慢慢到达，提供一个process_callback
+  AutoModelForCausalLM.from_pretrained promise
+  Promise.all([])
+  
