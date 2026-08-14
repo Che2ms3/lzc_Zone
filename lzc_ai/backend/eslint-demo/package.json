@@ -1,0 +1,18 @@
+{
+  "name": "eslint-demo",
+  "version": "1.0.0",
+  "description": "eslint 是工程化质量的重要保证 强制团队写出一致风格的代码，严格检查代码，潜在的bug，",
+  "main": "index.js",
+  "scripts": {
+    "lint":"eslint .",
+    "link:fix":"eslint . --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.1",
+    "globals": "^17.11.0"
+  }
+}
