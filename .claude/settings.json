@@ -9,7 +9,16 @@
       "Bash(nslookup in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn)",
       "Bash(nc -zv -w 5 120.55.41.17 443)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X GET \"https://in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn:443/health\")",
-      "Bash(curl -s -X POST https://in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn:443/v2/vectordb/collections/list -H 'Authorization: Bearer 8c28c7cb1e2fb23e386c65cf61e8c0a1439b4af7c7f906cecef0a3f9a5ae675b9c94a87ded563617d002954608463f28fee8545f' -H 'Content-Type: application/json' -d '{}')"
+      "Bash(curl -s -X POST https://in03-a210f80dbed24b2.serverless.ali-cn-hangzhou.cloud.zilliz.com.cn:443/v2/vectordb/collections/list -H 'Authorization: Bearer 8c28c7cb1e2fb23e386c65cf61e8c0a1439b4af7c7f906cecef0a3f9a5ae675b9c94a87ded563617d002954608463f28fee8545f' -H 'Content-Type: application/json' -d '{}')",
+      "Bash(curl -s -o /dev/null -w \"首页: %{http_code}\\\\n\" http://localhost:3001/)",
+      "Bash(curl -s -o /dev/null -w \"笔记页: %{http_code}\\\\n\" http://localhost:3001/note/1702459181837)",
+      "Bash(npm i *)",
+      "Bash(mv /Users/cheems23/Desktop/WorkSpase/lzc_ai/backend/nextjs/readme.md /tmp/nextjs-readme.md)",
+      "Bash(lsof -i :3000 -sTCP:LISTEN)",
+      "Bash(echo \"exit=$?\")"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }
