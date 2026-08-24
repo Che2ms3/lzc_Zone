@@ -15,7 +15,16 @@
       "Bash(npm i *)",
       "Bash(mv /Users/cheems23/Desktop/WorkSpase/lzc_ai/backend/nextjs/readme.md /tmp/nextjs-readme.md)",
       "Bash(lsof -i :3000 -sTCP:LISTEN)",
-      "Bash(echo \"exit=$?\")"
+      "Bash(echo \"exit=$?\")",
+      "Bash(ps -p 51666 -o command=)",
+      "Bash(awk '$4==\"cwd\" {print $NF}')",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s \"http://localhost:5173/src/components/RequireAuth.jsx\")",
+      "Bash(curl -s \"http://localhost:5173/src/components/Nav.jsx\")",
+      "Bash(curl -s -X POST http://localhost:5173/api/login -H \"Content-Type: application/json\" -d '{\"username\":\"test\"}' -w \"\\\\nHTTP %{http_code}\\\\n\")",
+      "Bash(curl -s -X POST http://localhost:5173/api/login -H \"Content-Type: application/json\" -d '{\"username\":\"cheems\",\"password\":\"123\"}' -w \"\\\\nHTTP %{http_code}\\\\n\")",
+      "Bash(curl -s -i 'http://localhost:5173/api/login')",
+      "Bash(curl -s 'http://localhost:5173/api/login')"
     ],
     "additionalDirectories": [
       "/tmp"
